@@ -1,0 +1,23 @@
+/data
+# compiled output
+/backend-api/dist
+/backend-api/node_modules
+
+# Logs
+/backend-api/logs
+/backend-api/*.log
+/backend-api/npm-debug.log*
+/backend-api/pnpm-debug.log*
+/backend-api/yarn-debug.log*
+/backend-api/yarn-error.log*
+/backend-api/lerna-debug.log*
+
+# OS
+/backend-api/.DS_Store
+
+# Tests
+/backend-api//coverage
+/backend-api//.nyc_output
+
+# IDEs and editors
+/.idea
