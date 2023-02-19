@@ -1,7 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User } from './users.entity';
+import { CreateUserDto } from './dto';
+import { UpdateUserDto, UserIdParams } from './dto/users.dto';
+import { User } from './entities/users.entity';
 
 @Injectable()
 export class UsersService {
@@ -10,23 +12,80 @@ export class UsersService {
     private usersRepository: Repository<User>,
   ) { }
 
+
   async findAll(): Promise<User[]> {
-    return this.usersRepository.find();
+
+    try {
+      return await this.usersRepository.find()
+    } catch (error) {
+      throw new HttpException({ message: 'Error finding users' }, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
   }
 
-  async findOne(id: number): Promise<User> {
-    return this.usersRepository.findOneBy({ id });
+
+  async findById(id: string): Promise<User> {
+
+    const user = await this.usersRepository.findOneBy({ id });
+
+    if (!user)
+      throw new HttpException({ message: 'User not found' }, HttpStatus.BAD_REQUEST);
+
+    try {
+      return user;
+    } catch (error) {
+      throw new HttpException({ message: 'Error finding user' }, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
   }
+
+
+  async create(user: CreateUserDto) {
+
+    if (await this.usersRepository.findOneBy({ email: user.email }) || await this.usersRepository.findOneBy({ username: user.username }))
+      throw new HttpException({ message: 'User may already exist' }, HttpStatus.BAD_REQUEST);
+
+    try {
+      // Known Issue : https://github.com/typeorm/typeorm/issues/8706
+      await this.usersRepository.save(this.usersRepository.create(user))
+    } catch (error) {
+      console.log(error)
+      throw new HttpException({ message: 'Error creating user' }, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+  }
+
 
   async remove(id: string): Promise<void> {
-    await this.usersRepository.delete(id);
+
+    const user = await this.usersRepository.findOneBy({ id });
+
+    if (!user)
+      throw new HttpException({ message: 'User not found' }, HttpStatus.BAD_REQUEST);
+
+    try {
+      await this.usersRepository.delete(id);
+    } catch (error) {
+      throw new HttpException({ message: 'Error deleting user' }, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
   }
 
-  async create(user: User): Promise<User> {
-    return this.usersRepository.save(user);
-  }
+  async update(id: string, userData: UpdateUserDto) {
 
-  async update(user: User): Promise<User> {
-    return this.usersRepository.merge(user);
+    const oldUserData = await this.usersRepository.findOneBy({ id });
+
+    if (!oldUserData)
+      throw new HttpException({ message: 'User not found' }, HttpStatus.BAD_REQUEST);
+
+    delete oldUserData.password;
+    const updatedUserData = Object.assign(oldUserData, userData);
+
+    try {
+      await this.usersRepository.save(updatedUserData);
+    } catch (error) {
+      throw new HttpException({ message: 'Error updating user' }, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
   }
 }

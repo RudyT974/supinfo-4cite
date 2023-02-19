@@ -1,9 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm'
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { User } from './users/users.entity';
+import { User } from './users/entities/users.entity';
+import { UsersModule } from './users/users.module';
 
 
 @Module({
@@ -17,13 +16,9 @@ import { User } from './users/users.entity';
       database: 'postgres',
       entities: [User],
       synchronize: true,
-      retryDelay: 3000,
-      retryAttempts: 10,
-      autoLoadEntities: true,
     }),
+    UsersModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 
 export class AppModule {
