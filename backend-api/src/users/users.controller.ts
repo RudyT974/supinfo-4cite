@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, UsePipes, ValidationPipe } from "@nestjs/common";
-import { CreateUserDto, UpdateUserDto } from "./dto/crud.dto";
+import { UpdateUserDto } from "./dto/crud.dto";
 import { Role } from "../auth/guards/auth.enum";
 import { Roles } from "../auth/guards/auth.decorator";
 import { User } from "./entities/users.entity";
@@ -22,13 +22,6 @@ export class UsersController {
   @UsePipes(new ValidationPipe({ transform: true }))
   async findById(@Param() { id }: UserIdParams): Promise<User> {
     return this.userService.findById(id);
-  }
-
-  @Post()
-  @Roles(Role.ADMIN)
-  @UsePipes(new ValidationPipe({ transform: true }))
-  async create(@Body() userData: CreateUserDto) {
-    return this.userService.create(userData);
   }
 
   @Delete(':id')

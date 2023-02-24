@@ -5,4 +5,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   await app.listen(3000);
 }
+
+export const JWT_SECRET = 'secret';
+
 bootstrap();

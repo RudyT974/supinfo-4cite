@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateUserDto, UpdateUserDto } from './dto';
+import { UpdateUserDto } from './dto';
 import { User } from './entities/users.entity';
 
 @Injectable()
@@ -34,22 +34,6 @@ export class UsersService {
       return user;
     } catch (error) {
       throw new HttpException({ message: 'Error finding user' }, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-
-  }
-
-
-  async create(user: CreateUserDto) {
-
-    if (await this.usersRepository.findOneBy({ email: user.email }) || await this.usersRepository.findOneBy({ username: user.username }))
-      throw new HttpException({ message: 'User may already exist' }, HttpStatus.BAD_REQUEST);
-
-    try {
-      // Known Issue : https://github.com/typeorm/typeorm/issues/8706
-      await this.usersRepository.save(this.usersRepository.create(user))
-    } catch (error) {
-      console.log(error)
-      throw new HttpException({ message: 'Error creating user' }, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
   }
