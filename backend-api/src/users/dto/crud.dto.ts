@@ -24,10 +24,3 @@ export class UpdateUserDto {
 
 }
 
-export class UserIdParams {
-
-  @IsNotEmpty()
-  @IsUUID()
-  readonly id: string;
-
-}
