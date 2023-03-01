@@ -5,7 +5,7 @@ import { AuthModule } from './auth/auth.modules';
 import { User } from './users/entities/users.entity';
 import { Hotel } from './hotels/entities/hotel.entity';
 import { UsersModule } from './users/users.module';
-import { HotelsModule } from './hotels/hotels.module';
+import { HotelsModule } from './hotels/Tests/hotels.module';
 
 
 @Module({
