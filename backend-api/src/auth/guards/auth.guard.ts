@@ -1,17 +1,43 @@
-import { CanActivate, ExecutionContext, Injectable } from "@nestjs/common";
+import { CanActivate, ExecutionContext, HttpException, Injectable } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
+import { request } from "http";
+import { DecodeToken, VerifyToken } from "../utils/jwt";
 import { Role } from "./auth.enum";
 
 @Injectable()
 export class RolesGuard implements CanActivate {
   constructor(private reflector: Reflector) { }
 
-  canActivate(context: ExecutionContext): boolean {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     // Find the required roles from the route handler and class
-    const roles = this.reflector.getAllAndOverride<Role[]>('roles', [context.getHandler(), context.getClass()]);
+    const requiredRoles = this.reflector.getAllAndOverride<Role[]>('roles', [context.getHandler(), context.getClass()]);
+    const authorizationHeader = context.switchToHttp().getRequest().headers.authorization;
 
-    // If no roles are required, allow the request
+    // Check if roles needed
+    if (!requiredRoles) {
+      return true;
+    }
 
-    return true;
+    // Check if roles needed and if user has token
+    if (requiredRoles && !authorizationHeader) {
+      return false;
+    }
+
+    // Check if token is valid
+    if (!VerifyToken(authorizationHeader.split(' ')[1])) {
+      return false;
+    }
+
+    // Get the data from the token
+    const tokenData = await DecodeToken(authorizationHeader.split(' ')[1]);
+
+    // Check if user has the required role
+    if (requiredRoles.find(role => role === tokenData.role)) {
+      console.log(requiredRoles, tokenData.role, "true")
+      return true;
+    } else {
+      console.log(requiredRoles, tokenData.role, "false")
+      return false;
+    }
   }
 }

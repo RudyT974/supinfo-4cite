@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UsePipes, ValidationPipe } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Put, Req, UsePipes, ValidationPipe } from "@nestjs/common";
 import { UpdateUserDto } from "./dto/crud.dto";
 import { Role } from "../auth/guards/auth.enum";
 import { Roles } from "../auth/guards/auth.decorator";
@@ -13,8 +13,8 @@ export class UsersController {
   @Get()
   @Roles(Role.ADMIN, Role.EMPLOYEE)
   @UsePipes(new ValidationPipe({ transform: true }))
-  async findAll(): Promise<User[]> {
-    return this.userService.findAll();
+  async findAllUser(@Req() req: any): Promise<User[]> {
+    return this.userService.findAll(req);
   }
 
   @Get(':id')
@@ -25,7 +25,7 @@ export class UsersController {
   }
 
   @Delete(':id')
-  @Roles(Role.ADMIN)
+  @Roles(Role.ADMIN, Role.EMPLOYEE)
   @UsePipes(new ValidationPipe({ transform: true }))
   async remove(@Param() { id }: UserIdParams): Promise<void> {
     await this.userService.remove(id);
@@ -39,4 +39,6 @@ export class UsersController {
   }
 
 }
+
+
 

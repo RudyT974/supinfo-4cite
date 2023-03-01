@@ -1,4 +1,4 @@
-/data
+/database/data
 # compiled output
 /backend-api/dist
 /backend-api/node_modules

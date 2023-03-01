@@ -1,5 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { DecodeToken } from 'src/auth/utils/jwt';
 import { Repository } from 'typeorm';
 import { UpdateUserDto } from './dto';
 import { User } from './entities/users.entity';
@@ -12,14 +13,24 @@ export class UsersService {
   ) { }
 
 
-  async findAll(): Promise<User[]> {
 
+
+  async findAll(req: any): Promise<User[]> {
     try {
-      return await this.usersRepository.find()
+      const token = await req.headers.authorization.split(' ')[1];
+      const decoded = await DecodeToken(token);
+
+      if (decoded.role === 'employee') {
+        return await this.usersRepository.findBy({ role: 'customer' })
+      }
+
+      if (decoded.role === 'admin') {
+        return await this.usersRepository.find()
+      }
+
     } catch (error) {
       throw new HttpException({ message: 'Error finding users' }, HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
   }
 
 
