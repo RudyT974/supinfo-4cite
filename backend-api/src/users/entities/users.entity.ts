@@ -1,6 +1,5 @@
 const argon2 = require('argon2');
 import { HttpException, HttpStatus } from '@nestjs/common';
-import { Exclude } from 'class-transformer';
 import { Entity, Column, PrimaryGeneratedColumn, BeforeInsert, BeforeUpdate } from 'typeorm';
 
 @Entity()

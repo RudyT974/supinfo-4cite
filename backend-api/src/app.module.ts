@@ -3,7 +3,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm'
 import { AuthModule } from './auth/auth.modules';
 import { User } from './users/entities/users.entity';
+import { Hotel } from './hotels/entities/hotel.entity';
 import { UsersModule } from './users/users.module';
+import { HotelsModule } from './hotels/hotels.module';
 
 
 @Module({
@@ -15,11 +17,12 @@ import { UsersModule } from './users/users.module';
       username: 'postgres',
       password: 'password',
       database: 'postgres',
-      entities: [User],
+      entities: [User], [Hotel],
       synchronize: true,
     }),
     AuthModule,
     UsersModule,
+    HotelsModule,
   ],
 })
 
