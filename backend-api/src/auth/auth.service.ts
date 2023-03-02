@@ -44,7 +44,6 @@ export class AuthService {
       // Known Issue : https://github.com/typeorm/typeorm/issues/8706
       await this.usersRepository.save(this.usersRepository.create(user))
     } catch (error) {
-      console.log(error)
       throw new HttpException({ message: 'Error creating user' }, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
@@ -67,7 +66,6 @@ export class AuthService {
       // Known Issue : https://github.com/typeorm/typeorm/issues/8706
       await this.usersRepository.save(this.usersRepository.create(employeeData))
     } catch (error) {
-      console.log(error)
       throw new HttpException({ message: 'Error creating user' }, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
@@ -89,7 +87,6 @@ export class AuthService {
       // Known Issue : https://github.com/typeorm/typeorm/issues/8706
       await this.usersRepository.save(this.usersRepository.create(adminData))
     } catch (error) {
-      console.log(error)
       throw new HttpException({ message: 'Error creating user' }, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 

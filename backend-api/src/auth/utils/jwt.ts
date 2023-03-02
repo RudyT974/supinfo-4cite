@@ -2,7 +2,7 @@ import { HttpException, HttpStatus } from "@nestjs/common";
 import { JWT_SECRET } from "src/main";
 import { Token, TokenStructure } from "../dto/auth.dto";
 
-const jwt = require('jsonwebtoken');
+let jwt = require('jsonwebtoken');
 
 export async function GenerateToken(params: TokenStructure): Promise<Token> {
   try {
