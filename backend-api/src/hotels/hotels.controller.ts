@@ -17,13 +17,11 @@ export class HotelsController {
   }
 
   @Get()
-  @Roles(Role.ADMIN, Role.EMPLOYEE)
   async findAll(): Promise<Hotel[]> {
     return this.hotelsService.findAll();
   }
 
   @Get(':id')
-  @Roles(Role.ADMIN, Role.EMPLOYEE)
   async findById(@Param('id') id: string) {
     return this.hotelsService.findById(id);
   }
@@ -31,12 +29,12 @@ export class HotelsController {
   @Patch(':id')
   @Roles(Role.ADMIN, Role.EMPLOYEE)
   async update(@Param('id') id: string, @Body() updateHotelDto: UpdateHotelDto) {
-    return this.hotelsService.update(id, updateHotelDto);
+    return this.hotelsService.update(id, updateHotelDto,Headers);
   }
 
   @Delete(':id')
   @Roles(Role.ADMIN, Role.CUSTOMER)
   async remove(@Param('id') id: string) {
-    return this.hotelsService.remove(id);
+    return this.hotelsService.remove(id,Headers);
   }
 }

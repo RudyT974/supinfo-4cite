@@ -7,11 +7,6 @@ import { Role } from "./auth.enum";
 export class RolesGuard implements CanActivate {
   constructor(private reflector: Reflector) { }
 
-<<<<<<< HEAD
-  canActivate(context: ExecutionContext): boolean {
-    const roles = this.reflector.getAllAndOverride<Role[]>('roles', [context.getHandler(), context.getClass()]);
-    return true;
-=======
   async canActivate(context: ExecutionContext): Promise<boolean> {
     // Find the required roles from the route handler and class
     const requiredRoles = this.reflector.getAllAndOverride<Role[]>('roles', [context.getHandler(), context.getClass()]);
@@ -43,6 +38,5 @@ export class RolesGuard implements CanActivate {
       console.log(requiredRoles, tokenData.role, "false")
       return false;
     }
->>>>>>> 28fec43b526fc9bdb8cd2ca384f2bf11175defca
   }
 }
