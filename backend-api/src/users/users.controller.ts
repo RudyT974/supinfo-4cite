@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UsePipes, ValidationPipe } from "@nestjs/common";
+import { Body, Headers, Controller, Delete, Get, Param, Put, UsePipes, ValidationPipe } from "@nestjs/common";
 import { UpdateUserDto } from "./dto/crud.dto";
 import { Role } from "../auth/guards/auth.enum";
 import { Roles } from "../auth/guards/auth.decorator";
@@ -13,30 +13,32 @@ export class UsersController {
   @Get()
   @Roles(Role.ADMIN, Role.EMPLOYEE)
   @UsePipes(new ValidationPipe({ transform: true }))
-  async findAll(): Promise<User[]> {
-    return this.userService.findAll();
+  async findAllUser(@Headers() headers: any): Promise<User[]> {
+    return this.userService.findAll(headers);
   }
 
   @Get(':id')
-  @Roles(Role.ADMIN, Role.EMPLOYEE)
+  @Roles(Role.ADMIN, Role.EMPLOYEE, Role.CUSTOMER)
   @UsePipes(new ValidationPipe({ transform: true }))
-  async findById(@Param() { id }: UserIdParams): Promise<User> {
-    return this.userService.findById(id);
+  async findById(@Param() { id }: UserIdParams, @Headers() headers: any): Promise<User> {
+    return this.userService.findById(id, headers);
   }
 
   @Delete(':id')
-  @Roles(Role.ADMIN)
+  @Roles(Role.ADMIN, Role.CUSTOMER)
   @UsePipes(new ValidationPipe({ transform: true }))
-  async remove(@Param() { id }: UserIdParams): Promise<void> {
-    await this.userService.remove(id);
+  async remove(@Param() { id }: UserIdParams, @Headers() headers: any): Promise<void> {
+    await this.userService.remove(id, headers);
   }
 
   @Put(':id')
-  @Roles(Role.ADMIN, Role.CUSTOMER)
+  @Roles(Role.ADMIN, Role.EMPLOYEE, Role.CUSTOMER)
   @UsePipes(new ValidationPipe({ transform: true }))
-  async update(@Param() { id }: UserIdParams, @Body() userData: UpdateUserDto) {
-    return this.userService.update(id, userData);
+  async update(@Param() { id }: UserIdParams, @Body() userData: UpdateUserDto, @Headers() headers: any): Promise<void> {
+    return this.userService.update(id, userData, headers);
   }
 
 }
+
+
 
