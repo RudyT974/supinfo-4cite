@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, ConflictException, NotFoundException } from '@nestjs/common';
 import { HttpException } from '@nestjs/common/exceptions';
 import {HttpStatus} from '@nestjs/common';
 import { CreateHotelDto } from './dto/create-hotel.dto';
@@ -8,28 +8,25 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Token } from 'src/auth/dto/auth.dto';
 import { DecodeToken } from 'src/auth/utils/jwt';
+import { removeHotel } from './dto/delete-hotel.dto';
 
 
 @Injectable()
 export class HotelsService {
-  
-  async create(createHotelDto: CreateHotelDto) {
-    const hotel = await this.hotelsRepository.findOne({select: ['id', 'name', 'location'] });
-
-    if (await this.hotelsRepository.findOneBy({ name: hotel.name }))
-    throw new HttpException({ message: 'Hotel may already exist' }, HttpStatus.BAD_REQUEST);
-
-  try {
-    await this.hotelsRepository.save(this.hotelsRepository.create(hotel))
-  } catch (error) {
-    console.log(error)
-    throw new HttpException({ message: 'Error creating hotel' }, HttpStatus.INTERNAL_SERVER_ERROR);
-  }
-  }
   constructor(
     @InjectRepository(Hotel)
     private hotelsRepository: Repository<Hotel>,
   ) { }
+
+  async create(hotel: CreateHotelDto): Promise<void> {
+  if (await this.hotelsRepository.findOneBy({ name:hotel.name }))
+    throw new HttpException({ message: 'Hotel may already exist' }, HttpStatus.BAD_REQUEST);
+try {
+  await this.hotelsRepository.save(this.hotelsRepository.create(hotel))
+} catch (error) {
+  throw new HttpException({ message: 'Error creating hotel' }, HttpStatus.INTERNAL_SERVER_ERROR);
+}
+  }
 
   async findAll(): Promise<Hotel[]> {
    try{
@@ -52,13 +49,13 @@ export class HotelsService {
   }
   }
 
-  async update(id: string, updateHotelDto: UpdateHotelDto, headers: any) {
-    const oldHotelData = await this.hotelsRepository.findOneBy({ id });
+  async update(id: string, updateHotel: UpdateHotelDto, headers: any) {
+    const oldHotelData = await this.hotelsRepository.findOneBy({ name:updateHotel.name });
     const token: Token = await headers.authorization.split(' ')[1];
     const decoded = await DecodeToken(token);
 
     if(decoded.role === 'admin'){
-      const updatedUserData = Object.assign(oldHotelData, updateHotelDto);
+      const updatedUserData = Object.assign(oldHotelData, updateHotel);
 
     try {
       await this.hotelsRepository.save(updatedUserData);
@@ -75,8 +72,8 @@ export class HotelsService {
     const token: Token = await headers.authorization.split(' ')[1];
     const decoded = await DecodeToken(token);
 
-    if (decoded.id === id) {
-      hotel = await this.hotelsRepository.findOneBy({ id })
+    if (decoded.role === 'admin') {
+      hotel = await this.hotelsRepository.findOneBy({ name:removeHotel.name })
     }
     if (!hotel)
       throw new HttpException({ message: 'Hotel not found' }, HttpStatus.BAD_REQUEST);

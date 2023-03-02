@@ -15,7 +15,7 @@ export class Hotel {
     @Column({nullable: false })
     description: string;
 
-    @Column("simple-array", {nullable: false})
+    @Column("simple-array", {nullable: true})
     picture_list : string[];
 
 }
