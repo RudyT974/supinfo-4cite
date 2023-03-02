@@ -35,7 +35,7 @@ export class AuthService {
 
   }
 
-  async create(user: RegisterUserDto) {
+  async createUser(user: RegisterUserDto) {
 
     if (await this.usersRepository.findOneBy({ email: user.email }) || await this.usersRepository.findOneBy({ username: user.username }))
       throw new HttpException({ message: 'User may already exist' }, HttpStatus.BAD_REQUEST);
@@ -44,7 +44,49 @@ export class AuthService {
       // Known Issue : https://github.com/typeorm/typeorm/issues/8706
       await this.usersRepository.save(this.usersRepository.create(user))
     } catch (error) {
-      console.log(error)
+      throw new HttpException({ message: 'Error creating user' }, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+  }
+
+
+  async createEmployee(user: RegisterUserDto) {
+
+    if (await this.usersRepository.findOneBy({ email: user.email }) || await this.usersRepository.findOneBy({ username: user.username }))
+      throw new HttpException({ message: 'User may already exist' }, HttpStatus.BAD_REQUEST);
+
+    const employeeData = {
+      username: user.username,
+      email: user.email,
+      password: user.password,
+      role: 'employee'
+    }
+
+    try {
+      // Known Issue : https://github.com/typeorm/typeorm/issues/8706
+      await this.usersRepository.save(this.usersRepository.create(employeeData))
+    } catch (error) {
+      throw new HttpException({ message: 'Error creating user' }, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+  }
+
+  async createAdmin(user: RegisterUserDto) {
+
+    if (await this.usersRepository.findOneBy({ email: user.email }) || await this.usersRepository.findOneBy({ username: user.username }))
+      throw new HttpException({ message: 'User may already exist' }, HttpStatus.BAD_REQUEST);
+
+    const adminData = {
+      username: user.username,
+      email: user.email,
+      password: user.password,
+      role: 'admin'
+    }
+
+    try {
+      // Known Issue : https://github.com/typeorm/typeorm/issues/8706
+      await this.usersRepository.save(this.usersRepository.create(adminData))
+    } catch (error) {
       throw new HttpException({ message: 'Error creating user' }, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 

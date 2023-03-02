@@ -28,6 +28,6 @@ export class User {
     }
   }
 
-  @Column({ default: "user" })
+  @Column({ default: "customer" })
   role: string;
 }

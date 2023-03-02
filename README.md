@@ -2,28 +2,39 @@
 
 Typescript 4CITE project for SUPINFO.
 
-## Authorization
+## Local Installation
 
-### RBAC
+### Backend API
 
-Admin :
+**Requirements :**
 
-- Can do everything
-- Can create, update and delete an hotel {id, name, location, description, and picture_list}
+- Updated NodeJS
+- Updated Node Package Manager
+- Docker
 
-Employee :
+**Setup :**
 
-- Can read user informations
-- You can only update yourself
+```bash
+# Clone the repository
+# Go to the database folder
+# Run the database container
+# Go to the backend-api folder
+# Install node modules
+# Run the server
 
-User :
+git clone https://github.com/NathanRodet/supinfo-4cite.git
+cd supinfo-4cite/database
+docker-compose up -d
+cd ..
+cd /backend-api
+npm ci
+npm run start:dev
+```
 
-- Normal users cannot read information about another user
-- Can read his informations
-- You can only update yourself
-- All Write endpoints need the request to be authenticated (stateless)
+## Documentation
 
-Guest :
+### Postman
 
-- Can register
-- All Read endpoints of hotel data are non-logged/anonymous
+All endpoints are documented in the Postman collection in the `/backend-api/documentation` folder.
+
+

@@ -2,7 +2,7 @@ import { HttpException, HttpStatus } from "@nestjs/common";
 import { JWT_SECRET } from "src/main";
 import { Token, TokenStructure } from "../dto/auth.dto";
 
-var jwt = require('jsonwebtoken');
+let jwt = require('jsonwebtoken');
 
 export async function GenerateToken(params: TokenStructure): Promise<Token> {
   try {
@@ -17,11 +17,12 @@ export async function GenerateToken(params: TokenStructure): Promise<Token> {
   }
 }
 
-export async function VerifyToken(token: Token): Promise<Boolean> {
+export async function VerifyToken(token: Token): Promise<boolean> {
   try {
-    return await jwt.verify(token, JWT_SECRET);
+    const verified: boolean = await jwt.verify(token, JWT_SECRET);
+    return verified;
   } catch (error) {
-    throw new HttpException({ message: 'Error during token validation' }, HttpStatus.INTERNAL_SERVER_ERROR);
+    throw new HttpException({ message: 'Token is expired or invalid' }, 401);
   }
 }
 
