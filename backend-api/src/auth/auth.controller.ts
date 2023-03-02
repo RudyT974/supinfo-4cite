@@ -1,8 +1,7 @@
 import { Body, Controller, Post, UsePipes, ValidationPipe } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { Token, LoginUserDto, RegisterUserDto } from "./dto/auth.dto";
-import { Roles } from "./guards/auth.decorator";
-import { Role } from "./guards/auth.enum";
+
 
 @Controller('login')
 export class LoginController {

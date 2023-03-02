@@ -1,6 +1,5 @@
 import { CanActivate, ExecutionContext, HttpException, Injectable } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
-import { request } from "http";
 import { DecodeToken, VerifyToken } from "../utils/jwt";
 import { Role } from "./auth.enum";
 
@@ -20,11 +19,11 @@ export class RolesGuard implements CanActivate {
 
     // Check if roles needed and if user has token
     if (requiredRoles && !authorizationHeader) {
-      return false;
+      throw new HttpException({ message: 'Unauthorized' }, 401);
     }
 
-    // Check if token is valid
-    if (!VerifyToken(authorizationHeader.split(' ')[1])) {
+    // Check if token is valid (Error thrown in validation)
+    if (!await VerifyToken(authorizationHeader.split(' ')[1])) {
       return false;
     }
 
