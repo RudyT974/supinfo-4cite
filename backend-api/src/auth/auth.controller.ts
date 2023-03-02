@@ -9,7 +9,6 @@ export class LoginController {
   constructor(private readonly authService: AuthService) { }
 
   @Post()
-  @Roles(Role.GUEST)
   @UsePipes(new ValidationPipe({ transform: true }))
   async login(@Body() loginData: LoginUserDto): Promise<Token> {
     return this.authService.login(loginData);

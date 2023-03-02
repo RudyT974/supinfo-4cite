@@ -5,7 +5,7 @@ import { AuthModule } from './auth/auth.modules';
 import { User } from './users/entities/users.entity';
 import { Hotel } from './hotels/entities/hotel.entity';
 import { UsersModule } from './users/users.module';
-import { HotelsModule } from './hotels/Tests/hotels.module';
+import { HotelsModule } from './hotels/hotels.module';
 
 
 @Module({
@@ -17,7 +17,7 @@ import { HotelsModule } from './hotels/Tests/hotels.module';
       username: 'postgres',
       password: 'password',
       database: 'postgres',
-      entities: [User], [Hotel],
+      entities: [User, Hotel],
       synchronize: true,
     }),
     AuthModule,

@@ -1,10 +1,9 @@
-import { HttpException, HttpStatus } from '@nestjs/common';
-import { Entity, Column, PrimaryGeneratedColumn, BeforeInsert, BeforeUpdate } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn} from 'typeorm';
 
 @Entity()
 export class Hotel {
 
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn("uuid")
     id: string;
     
     @Column({ unique: true, nullable: false })
@@ -16,7 +15,7 @@ export class Hotel {
     @Column({nullable: false })
     description: string;
 
-    @Column({nullable: true })
+    @Column("simple-array", {nullable: false})
     picture_list : string[];
 
 }
