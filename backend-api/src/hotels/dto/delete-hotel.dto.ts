@@ -1,7 +1,7 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateHotelDto } from './create-hotel.dto';
 import { isArray, IsEmail, IsJWT, isNotEmpty, IsNotEmpty, IsNumber, IsString, IsStrongPassword, IsUUID, Length } from "class-validator";
-export class removeHotel extends PartialType(CreateHotelDto) {
+export class deleteHotelDto extends PartialType(CreateHotelDto) {
     @IsString()
     @Length(3,25)
     name: string;

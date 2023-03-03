@@ -1,12 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe, UsePipes } from '@nestjs/common';
+import { Controller,Headers, Get, Post, Body, Patch, Param, Delete, ValidationPipe, UsePipes, Put } from '@nestjs/common';
 import { HotelsService } from './hotels.service';
 import { CreateHotelDto } from './dto/create-hotel.dto';
 import { UpdateHotelDto } from './dto/update-hotel.dto';
 import { Role } from "../auth/guards/auth.enum";
 import { Roles } from "../auth/guards/auth.decorator";
 import { Hotel } from './entities/hotel.entity';
-import { removeHotel } from './dto/delete-hotel.dto';
-
+import { HotelIdParams } from './dto/HotelIdParams';
 @Controller('hotels')
 export class HotelsController {
   constructor(private readonly hotelsService: HotelsService) {}
@@ -28,17 +27,17 @@ export class HotelsController {
     return this.hotelsService.findById(id);
   }
 
-  @Patch(':id')
-  @Roles(Role.ADMIN)
+  @Put(':id')
+  @Roles(Role.ADMIN, Role.EMPLOYEE, Role.CUSTOMER)
   @UsePipes(new ValidationPipe({ transform: true }))
-  async update(@Param('id') id: string, @Body() updateHotelDto: UpdateHotelDto) {
-    return this.hotelsService.update(id, updateHotelDto,Headers);
+  async update(@Param() { id }: HotelIdParams, @Body() userData: CreateHotelDto, @Headers() headers: any): Promise<void> {
+    return this.hotelsService.update(id, userData, headers);
   }
 
   @Delete(':id')
-  @Roles(Role.ADMIN)
+  @Roles(Role.ADMIN, Role.CUSTOMER)
   @UsePipes(new ValidationPipe({ transform: true }))
-  async remove(@Param('id') id: string) {
-    return this.hotelsService.remove(id,Headers);
+  async remove(@Param() { id }: HotelIdParams, @Headers() headers: any): Promise<void> {
+    await this.hotelsService.remove(id, headers);
   }
 }

@@ -8,7 +8,7 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Token } from 'src/auth/dto/auth.dto';
 import { DecodeToken } from 'src/auth/utils/jwt';
-import { removeHotel } from './dto/delete-hotel.dto';
+import { deleteHotelDto } from './dto/delete-hotel.dto';
 
 
 @Injectable()
@@ -49,39 +49,45 @@ try {
   }
   }
 
-  async update(id: string, updateHotel: UpdateHotelDto, headers: any) {
-    const oldHotelData = await this.hotelsRepository.findOneBy({ name:updateHotel.name });
+  async update(id: string, userData: UpdateHotelDto, headers: any): Promise<void> {
+
     const token: Token = await headers.authorization.split(' ')[1];
     const decoded = await DecodeToken(token);
 
-    if(decoded.role === 'admin'){
-      const updatedUserData = Object.assign(oldHotelData, updateHotel);
+    if (decoded.id === id) {
+      const oldHotelData = await this.hotelsRepository.findOneBy({ id });
+      if (!oldHotelData) {
+        throw new HttpException({ message: 'User not found' }, HttpStatus.NOT_FOUND);
+      }
 
-    try {
-      await this.hotelsRepository.save(updatedUserData);
-    } catch (error) {
-      throw new HttpException({ message: 'Error updating hotel' }, HttpStatus.INTERNAL_SERVER_ERROR);
+      try {
+        delete oldHotelData.name;
+        const updatedUserData = Object.assign(oldHotelData, userData);
+        await this.hotelsRepository.save(updatedUserData);
+      } catch (error) {
+        throw new HttpException({ message: 'Error updating user' }, HttpStatus.INTERNAL_SERVER_ERROR);
+      }
     }
-    }else{
-      throw new HttpException({ message: 'Error updating hotel' }, HttpStatus.BAD_REQUEST);
-    } 
+
   }
 
   async remove(id: string, headers: any): Promise<void> {
-    let hotel = null;
+
     const token: Token = await headers.authorization.split(' ')[1];
     const decoded = await DecodeToken(token);
 
-    if (decoded.role === 'admin') {
-      hotel = await this.hotelsRepository.findOneBy({ name:removeHotel.name })
-    }
-    if (!hotel)
-      throw new HttpException({ message: 'Hotel not found' }, HttpStatus.BAD_REQUEST);
+    if (decoded.id === id) {
+      const hotel = await this.hotelsRepository.findOneBy({ id })
+      if (!hotel) {
+        throw new HttpException({ message: 'Hotel not found' }, HttpStatus.NOT_FOUND);
+      }
 
-    try {
-      await this.hotelsRepository.delete(id);
-    } catch (error) {
-      throw new HttpException({ message: 'Error deleting hotel' }, HttpStatus.INTERNAL_SERVER_ERROR);
+      try {
+        await this.hotelsRepository.delete(id);
+        console.log("hotel suprimer.")
+      } catch (error) {
+        throw new HttpException({ message: 'Error deleting hotel' }, HttpStatus.INTERNAL_SERVER_ERROR);
+      }
     }
 
     if (decoded.role === 'admin') {
