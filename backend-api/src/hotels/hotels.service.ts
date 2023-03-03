@@ -8,8 +8,6 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Token } from 'src/auth/dto/auth.dto';
 import { DecodeToken } from 'src/auth/utils/jwt';
-import { deleteHotelDto } from './dto/delete-hotel.dto';
-
 
 @Injectable()
 export class HotelsService {
@@ -57,7 +55,7 @@ try {
     if (decoded.id === id) {
       const oldHotelData = await this.hotelsRepository.findOneBy({ id });
       if (!oldHotelData) {
-        throw new HttpException({ message: 'User not found' }, HttpStatus.NOT_FOUND);
+        throw new HttpException({ message: 'Hotel not found' }, HttpStatus.NOT_FOUND);
       }
 
       try {
@@ -65,7 +63,7 @@ try {
         const updatedUserData = Object.assign(oldHotelData, userData);
         await this.hotelsRepository.save(updatedUserData);
       } catch (error) {
-        throw new HttpException({ message: 'Error updating user' }, HttpStatus.INTERNAL_SERVER_ERROR);
+        throw new HttpException({ message: 'Error updating hotel' }, HttpStatus.INTERNAL_SERVER_ERROR);
       }
     }
 
