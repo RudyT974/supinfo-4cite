@@ -12,7 +12,7 @@ export class HotelsController {
 
   @Post()
   @Roles(Role.ADMIN)
-  // @UsePipes(new ValidationPipe({ transform: true }))
+  @UsePipes(new ValidationPipe({ transform: true }))
   async create(@Body() hotel: CreateHotelDto) {
     return this.hotelsService.create(hotel);
   }
@@ -28,14 +28,14 @@ export class HotelsController {
   }
 
   @Put(':id')
-  @Roles(Role.ADMIN, Role.EMPLOYEE, Role.CUSTOMER)
-  @UsePipes(new ValidationPipe({ transform: true }))
-  async update(@Param() { id }: HotelIdParams, @Body() userData: CreateHotelDto, @Headers() headers: any): Promise<void> {
-    return this.hotelsService.update(id, userData, headers);
+  @Roles(Role.ADMIN)
+  // @UsePipes(new ValidationPipe({ transform: true }))
+  async update(@Param() { id }: HotelIdParams, @Body() hotelData: CreateHotelDto, @Headers() headers: any): Promise<void> {
+    return this.hotelsService.update(id, hotelData, headers);
   }
 
   @Delete(':id')
-  @Roles(Role.ADMIN, Role.CUSTOMER)
+  @Roles(Role.ADMIN)
   @UsePipes(new ValidationPipe({ transform: true }))
   async remove(@Param() { id }: HotelIdParams, @Headers() headers: any): Promise<void> {
     await this.hotelsService.remove(id, headers);
