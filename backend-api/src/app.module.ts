@@ -2,10 +2,14 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm'
 import { AuthModule } from './auth/auth.modules';
-import { UsersModule } from './users/users.module';
 import { User } from './users/entities/users.entity';
-import { AppService } from './app.service';
+import { Hotel } from './hotels/entities/hotel.entity';
+import { UsersModule } from './users/users.module';
+import { HotelsModule } from './hotels/hotels.module';
+import { BookingModule } from './booking/booking.module';
 import { AppController } from './app.controller';
+import { AppService } from './app.service';
+
 
 @Module({
   imports: [
@@ -16,11 +20,14 @@ import { AppController } from './app.controller';
       username: 'postgres',
       password: 'password',
       database: 'postgres',
-      entities: [User],
+      entities: [User, Hotel],
       synchronize: true,
     }),
     AuthModule,
     UsersModule,
+    HotelsModule,
+    BookingModule
+
   ],
   controllers: [AppController],
   providers: [AppService],
