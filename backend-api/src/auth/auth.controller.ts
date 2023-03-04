@@ -37,7 +37,7 @@ export class RegisterController {
   async createAdmin(@Body() userData: RegisterUserDto): Promise<void> {
     return this.authService.createAdmin(userData);
   }
-  
+
 }
 
 
