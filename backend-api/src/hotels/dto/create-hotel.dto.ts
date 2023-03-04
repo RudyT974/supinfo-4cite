@@ -15,7 +15,7 @@ export class CreateHotelDto {
     @Length(3,2000)
     description: string;
 
-    picture_list: string[]
+    picture_list:string[];
 
     
 

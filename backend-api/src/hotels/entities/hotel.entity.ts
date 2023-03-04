@@ -1,21 +1,22 @@
-import { Entity, Column, PrimaryGeneratedColumn} from 'typeorm';
-
+import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+ 
 @Entity()
 export class Hotel {
 
     @PrimaryGeneratedColumn("uuid")
     id: string;
     
-    @Column({ unique: true, nullable: false })
-    name : string;
-
-    @Column({ unique: true, nullable: false })
-    location : string;
-
-    @Column({nullable: false })
+    @Column()
+    name: string;
+  
+    @Column()
+    location: string;
+  
+    @Column()
     description: string;
-
+  
     @Column("simple-array", {nullable: true})
-    picture_list : string[];
+    picrure_list: string[];
 
-}
+  }
+  export default Hotel;

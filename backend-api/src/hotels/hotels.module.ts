@@ -4,11 +4,15 @@ import { HotelsController } from './hotels.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Hotel } from './entities/hotel.entity';
 
+
 @Module({
   imports: [TypeOrmModule.forFeature([Hotel])],
   controllers: [HotelsController],
   providers: [HotelsService],
-  exports: [HotelsService],
+  exports: [HotelsService]
+  
   
 })
 export class HotelsModule {}
+export { Hotel };
+

@@ -1,4 +1,4 @@
-import { Injectable, ConflictException, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { HttpException } from '@nestjs/common/exceptions';
 import {HttpStatus} from '@nestjs/common';
 import { CreateHotelDto } from './dto/create-hotel.dto';
@@ -14,17 +14,19 @@ export class HotelsService {
   constructor(
     @InjectRepository(Hotel)
     private hotelsRepository: Repository<Hotel>,
-  ) { }
-
+  ) {}
+    
   async create(hotel: CreateHotelDto): Promise<void> {
-  if (await this.hotelsRepository.findOneBy({ name:hotel.name }))
+  if (await this.hotelsRepository.findOneBy({ name: hotel.name}))
     throw new HttpException({ message: 'Hotel may already exist' }, HttpStatus.BAD_REQUEST);
 try {
   await this.hotelsRepository.save(this.hotelsRepository.create(hotel))
 } catch (error) {
+  console.log(error)
   throw new HttpException({ message: 'Error creating hotel' }, HttpStatus.INTERNAL_SERVER_ERROR);
 }
   }
+
 
   async findAll(): Promise<Hotel[]> {
    try{
@@ -34,7 +36,7 @@ try {
    }
   }
 
-  async findById(id: string): Promise<Hotel> {
+  async getHotelById(id: string): Promise<Hotel> {
 
     const hotel = await this.hotelsRepository.findOneBy({ id });
     if (!hotel)
@@ -47,25 +49,19 @@ try {
   }
   }
 
-  async update(id: string, userData: UpdateHotelDto, headers: any): Promise<void> {
+  async update(id: string, HotelData: UpdateHotelDto, headers: any): Promise<void> {
 
-    const token: Token = await headers.authorization.split(' ')[1];
-    const decoded = await DecodeToken(token);
-
-    if (decoded.id === id) {
-      const oldHotelData = await this.hotelsRepository.findOneBy({ id });
-      if (!oldHotelData) {
-        throw new HttpException({ message: 'Hotel not found' }, HttpStatus.NOT_FOUND);
-      }
-
+    const oldHotelData = await this.hotelsRepository.findOneBy({ id });
+    if (!oldHotelData) {
+      throw new HttpException({ message: 'Hotel not found' }, HttpStatus.NOT_FOUND);
+    }
       try {
-        delete oldHotelData.name;
-        const updatedUserData = Object.assign(oldHotelData, userData);
-        await this.hotelsRepository.save(updatedUserData);
+        delete oldHotelData.description;
+        const UpdateHotelDto = Object.assign(oldHotelData, HotelData);
+        await this.hotelsRepository.save(UpdateHotelDto);
       } catch (error) {
         throw new HttpException({ message: 'Error updating hotel' }, HttpStatus.INTERNAL_SERVER_ERROR);
       }
-    }
 
   }
 
