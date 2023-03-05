@@ -3,7 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from '../entities/users.entity';
 import { UsersController } from '../users.controller';
 import { UsersService } from '../users.service';
-import { AdminMock, decoded_admin, decoded_employee, decoded_random, UpdatedPassword, UserMock, UsersMock, UserUpdatePassMock } from './data.mock';
+import { AdminMock, decoded_admin, decoded_employee, decoded_random, EmployeeMock, UpdatedPassword, UserMock, UsersMock, UserUpdatePassMock } from './data.mock';
 
 
 let jwt = require('jsonwebtoken');
@@ -83,29 +83,23 @@ describe('CatsController', () => {
     });
   });
 
+  it('update by id', async () => {
+    let result: User = EmployeeMock;
+    const token = await GenerateToken({ id: decoded_employee.id, role: decoded_employee.role });
+    const headers = { 'authorization': `Bearer ${await token}` };
 
-  describe('update by id', () => {
-    it('should update user password', async () => {
-      let result: User = UserUpdatePassMock;
-      const token = await GenerateToken({ id: UserMock.id, role: UserMock.role });
-      const headers = { 'authorization': `Bearer ${await token}` };
+    jest.spyOn(usersService, 'findById').mockImplementation(async () => result);
 
-      jest.spyOn(usersService, 'findById').mockImplementation(async () => result);
-      console.log(result)
-      expect(await usersService.update(UserMock.id, UpdatedPassword, headers)).toBe(undefined) // Return Promise<void>
-    });
+    expect(await usersService.update(decoded_random.id, UpdatedPassword, headers)).toBe(undefined); // Promise<void>
   });
 
-  describe('delete by id', () => {
-    it('should delete user', async () => {
-      let result: User = UserMock;
-      const token = await GenerateToken({ id: decoded_employee.id, role: decoded_employee.role });
-      const headers = { 'authorization': `Bearer ${await token}` };
+  it('delete by id', async () => {
+    const token = await GenerateToken({ id: decoded_employee.id, role: decoded_employee.role });
+    const headers = { 'authorization': `Bearer ${await token}` };
 
-      jest.spyOn(usersService, 'delete').mockImplementation(async () => result);
+    jest.spyOn(usersService, 'remove').mockImplementation(async () => undefined);
 
-      expect(await usersService.remove(UserMock.id, headers)).toBe(undefined) // Return Promise<void>
-    });
-  }
+    expect(await usersService.remove(decoded_random.id, headers)).toBe(undefined); // Promise<void>
+  });
 
 });

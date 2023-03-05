@@ -116,7 +116,6 @@ export class UsersService {
         const updatedUserData = Object.assign(oldUserData, userData);
         await this.usersRepository.save(updatedUserData);
       } catch (error) {
-        console.log(error)
         throw new HttpException({ message: 'Error updating user' }, HttpStatus.INTERNAL_SERVER_ERROR);
       }
     }

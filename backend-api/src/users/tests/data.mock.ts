@@ -42,6 +42,19 @@ export const UsersMock = [
   }
 ]
 
+
+export const BadUserMock = {
+  id: "7b802795-ca4e-c072a3",
+  username: "t",
+  email: "testl.com",
+  password: "0nS!",
+  role: "cumer",
+}
+
+export const UpdatedPassword = {
+  password: "Z1d6484_64dgfgl!",
+}
+
 export const AdminMock = {
   id: "7b802795-ca4e-4136-a0a6-d78c61c072a3",
   username: "test-e2e",
@@ -59,7 +72,6 @@ export const EmployeeMock = {
   role: "employee",
 }
 
-
 export const UserMock = {
   id: "7b802795-ca4e-4136-a0a6-d78c61c072a3",
   username: "test-e2e",
@@ -67,19 +79,6 @@ export const UserMock = {
   password: "0nly_F4NS!",
   role: "customer",
 }
-
-export const BadUserMock = {
-  id: "7b802795-ca4e-c072a3",
-  username: "t",
-  email: "testl.com",
-  password: "0nS!",
-  role: "cumer",
-}
-
-export const UpdatedPassword = {
-  password: "Z1d6484_64dgfgl!",
-}
-
 
 export const UserUpdatePassMock = {
   id: "7b802795-ca4e-4136-a0a6-d78c61c072a3",
