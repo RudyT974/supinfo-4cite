@@ -1,7 +1,14 @@
-import {Link} from "react-router-dom";
-import Button from "@mui/material/Button";
+
 import hotelplaceholder from "../assets/hotel-placeholder.jpg"
+import axios from "axios";
+import {useEffect} from "react";
+import {Link} from "react-router-dom";
 export default function Suggestions() {
+    useEffect(() => {
+        if(isConnected()){
+            getHotels();
+        }
+    });
     return (
         <div className={"container setFlex"}>
             <div className={"row"}>
@@ -12,9 +19,10 @@ export default function Suggestions() {
                         <img className={"card-img-top hotel-card-img"} src={hotelplaceholder} alt="Card image cap"/>
                         <div className="card-body">
                             <h5 className="card-title">{hotel.name}</h5>
-                            <p className="card-text">Some quick example  text to build on the card title and make up the bulk of
-                                the card's content.</p>
-                            <a href="#" className="btn btn-primary">Go somewhere</a>
+                            <p className="card-text">{hotel.desc}</p>
+                            <p className="card-text">{hotel.location}</p>
+
+                            <Link to={"/hotel/" + hotel.id} className="btn btn-primary">Réserver</Link>
                         </div>
                     </div>
                     </div>
@@ -23,23 +31,41 @@ export default function Suggestions() {
         </div>
     )
 }
-const hList = [
-    {
-        name: 'monstera',
-        category: 'classique',
-        id: '1ed',
-        isBestSale: true
-    },
-    {
-        name: 'ficus lyrata',
-        category: 'classique',
-        id: '2ed',
-        isBestSale: false
-    },
-    {
-        name: 'pothos argenté',
-        category: 'classique',
-        id: '3ed',
-        isBestSale: true
-    }
+let hList = [
 ]
+function isConnected(){
+    var token = localStorage.getItem("token");
+    if(token === null || token === "disconnected"){
+        return false;
+    }
+    return true;
+
+}
+
+async function getHotels(){
+    console.log("searching");
+    var token = localStorage.getItem("token");
+    const config = {
+        headers:{
+            Authorization: "Bearer " + token,
+        }
+    };
+    try {
+        const res = await axios.get('http://localhost:3000/hotels/', config);
+        hList = [];
+        var array = (JSON.parse(res.request.responseText));
+        for (var i = 0; i < array.length; i++) {
+            var hotel = array[i];
+            hList.push({
+                id : hotel.id,
+                name : hotel.name,
+                desc : hotel.description,
+                location : hotel.location
+            })
+        }
+        console.log(hList);
+
+    } catch (err) {
+        console.error(err);
+    }
+}

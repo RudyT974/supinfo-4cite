@@ -1,10 +1,11 @@
-import React from 'react';
 import {Route, Routes} from 'react-router-dom';
 import Header from './composants/Header'
 import Contact from "./Pages/Contact";
 import Connexion from "./Pages/Connexion";
 import Profile from "./Pages/Profile";
 import Inscription from "./Pages/Inscription";
+import Logout from "./Pages/Logout";
+import Ajout from "./Pages/Ajout";
 
 import Home from "./Pages/Home";
 import './styles/index.css';
@@ -21,7 +22,9 @@ export default function App() {
         <Route path="/" element={<Home />}/>
         <Route path="Contact" element={<Contact />}/>
         <Route path="Connexion" element={<Connexion />}/>
-        <Route path="Profile" element={<Profile />}/>
+        <Route path="Logout" element={<Logout />}/>
+        <Route path="Profil" element={<Profile />} />
+        <Route path="Ajout" element={<Ajout />} />
         <Route path="Inscription" element={<Inscription />}/>
 
       </Routes>

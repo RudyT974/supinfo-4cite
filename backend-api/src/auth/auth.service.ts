@@ -30,7 +30,6 @@ export class AuthService {
       throw new HttpException({ message: 'Wrong password' }, HttpStatus.BAD_REQUEST);
     }
   }
-
   async createUser(user: RegisterUserDto) {
 
     if (await this.usersRepository.findOneBy({ email: user.email }) || await this.usersRepository.findOneBy({ username: user.username }))
