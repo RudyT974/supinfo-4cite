@@ -3,7 +3,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { HotelsController } from '../hotels.controller';
 import { Hotel, HotelsModule } from '../hotels.module';
 import { HotelsService } from '../hotels.service';
-
 let jwt = require('jsonwebtoken');
 
 

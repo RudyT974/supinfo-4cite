@@ -1,6 +1,5 @@
 import { Test } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import exp from 'constants';
 import { User } from '../../users/entities/users.entity';
 import { LoginController, RegisterController } from '../auth.controller';
 import { AuthService } from '../auth.service';
