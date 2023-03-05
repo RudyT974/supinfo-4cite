@@ -10,6 +10,7 @@ import { decoded_admin, decoded_customer, HotelData1 } from './data.mock';
 import { JWT_SECRET } from '../../src/auth/utils/constant';
 import { HotelsModule } from '../../src/hotels/hotels.module';
 import {Hotel} from '../../src/hotels/entities/hotel.entity'
+import { UpdateHotelDto } from '../../src/hotels/dto/update-hotel.dto';
 
 
 let jwt = require('jsonwebtoken');
@@ -77,4 +78,18 @@ describe('UserController (e2e)', () => {
     return await request(app.getHttpServer()).get('/hotels').set('Authorization', `Bearer ${token}`).expect(200);
   });
 
+  it('/hotels PATCH - Admin', async() =>{
+    const token = await GenerateToken(decoded_admin);
+    return request(app.getHttpServer())
+      .post('/hotels')
+      .set('Authorization', `Bearer ${token}`)
+      .send(UpdateHotelDto.length.toString)
+      .expect(res => {
+        if (res.statusCode === 400) {
+          expect(res.text).toEqual(400)
+        } else {
+          expect(res.statusCode).toBe(201)
+        }
+      })
+  });
 })
