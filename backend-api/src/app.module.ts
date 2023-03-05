@@ -6,7 +6,8 @@ import { User } from './users/entities/users.entity';
 import { Hotel } from './hotels/entities/hotel.entity';
 import { UsersModule } from './users/users.module';
 import { HotelsModule } from './hotels/hotels.module';
-import { BookingModule } from './booking/booking.module';
+import { BookingsModule } from './bookings/booking.module';
+import { Booking } from './bookings/entities/booking.entity';
 
 
 @Module({
@@ -18,13 +19,13 @@ import { BookingModule } from './booking/booking.module';
       username: 'postgres',
       password: 'password',
       database: 'postgres',
-      entities: [User, Hotel],
+      entities: [User, Hotel, Booking],
       synchronize: true,
     }),
     AuthModule,
     UsersModule,
     HotelsModule,
-    BookingModule
+    BookingsModule
     
   ],
 })
