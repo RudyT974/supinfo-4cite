@@ -16,7 +16,7 @@ async function GenerateToken(params) {
   }, "JWT_SECRET");
 }
 
-describe('CatsController', () => {
+describe('BookingController', () => {
   let bookingsService: BookingsService;
   let bookingsController: BookingController;
 
@@ -37,7 +37,6 @@ describe('CatsController', () => {
       providers: [BookingsService],
     }).compile();
 
-    bookingsService = moduleRef.get<BookingsService>(BookingsService);
     bookingsController = moduleRef.get<BookingController>(BookingController);
   });
 
