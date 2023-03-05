@@ -1,4 +1,4 @@
-import { Body, Headers, Controller, Delete, Get, Param, Put, UsePipes, ValidationPipe } from "@nestjs/common";
+import { Body, Headers, Controller, Delete, Get, Param, UsePipes, ValidationPipe, Patch } from "@nestjs/common";
 import { UpdateUserDto } from "./dto/crud.dto";
 import { Role } from "../auth/guards/auth.enum";
 import { Roles } from "../auth/guards/auth.decorator";
@@ -31,7 +31,7 @@ export class UsersController {
     await this.userService.remove(id, headers);
   }
 
-  @Put(':id')
+  @Patch(':id')
   @Roles(Role.ADMIN, Role.EMPLOYEE, Role.CUSTOMER)
   @UsePipes(new ValidationPipe({ transform: true }))
   async update(@Param() { id }: UserIdParams, @Body() userData: UpdateUserDto, @Headers() headers: any): Promise<void> {

@@ -1,13 +1,10 @@
 const argon2 = require('argon2');
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { User } from "src/users/entities/users.entity";
+import { User } from './../users/entities/users.entity';
 import { Repository } from "typeorm";
 import { Token, LoginUserDto, RegisterUserDto } from "./dto/auth.dto";
 import { GenerateToken } from "./utils/jwt";
-
-// https://www.youtube.com/watch?v=_L225zpUK0M&ab_channel=MariusEspejo
-// https://www.youtube.com/watch?v=wdsp7BNmJRc&ab_channel=MariusEspejo
 
 @Injectable()
 export class AuthService {
@@ -23,16 +20,15 @@ export class AuthService {
     if (!user)
       throw new HttpException({ message: 'User not found' }, HttpStatus.BAD_REQUEST);
 
-    try {
-      if (await argon2.verify(user.password, loginData.password)) {
+    if (await argon2.verify(user.password, loginData.password)) {
+      try {
         return await GenerateToken({ id: user.id, role: user.role })
-      } else {
-        throw new HttpException({ message: 'Wrong password' }, HttpStatus.BAD_REQUEST);
+      } catch (error) {
+        throw new HttpException({ message: 'Error during token generation' }, HttpStatus.INTERNAL_SERVER_ERROR);
       }
-    } catch (error) {
-      throw new HttpException({ message: 'Error during token validation' }, HttpStatus.INTERNAL_SERVER_ERROR);
+    } else {
+      throw new HttpException({ message: 'Wrong password' }, HttpStatus.BAD_REQUEST);
     }
-
   }
 
   async createUser(user: RegisterUserDto) {
