@@ -23,18 +23,16 @@ export class AuthService {
     if (!user)
       throw new HttpException({ message: 'User not found' }, HttpStatus.BAD_REQUEST);
 
-    try {
-      if (await argon2.verify(user.password, loginData.password)) {
+    if (await argon2.verify(user.password, loginData.password)) {
+      try {
         return await GenerateToken({ id: user.id, role: user.role })
-      } else {
-        throw new HttpException({ message: 'Wrong password' }, HttpStatus.BAD_REQUEST);
+      } catch (error) {
+        throw new HttpException({ message: 'Error during token generation' }, HttpStatus.INTERNAL_SERVER_ERROR);
       }
-    } catch (error) {
-      throw new HttpException({ message: 'Error during token validation' }, HttpStatus.INTERNAL_SERVER_ERROR);
+    } else {
+      throw new HttpException({ message: 'Wrong password' }, HttpStatus.BAD_REQUEST);
     }
-
   }
-
   async createUser(user: RegisterUserDto) {
 
     if (await this.usersRepository.findOneBy({ email: user.email }) || await this.usersRepository.findOneBy({ username: user.username }))

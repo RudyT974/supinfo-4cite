@@ -1,8 +1,34 @@
-import React from 'react';
-import { MDBCol, MDBContainer, MDBRow, MDBCard, MDBCardText, MDBCardBody, MDBCardImage, MDBBtn, MDBTypography } from 'mdb-react-ui-kit';
+import React, {useEffect} from 'react';
+import "../styles/Profile.css";
+import {
+    MDBCol,
+    MDBContainer,
+    MDBRow,
+    MDBCard,
+    MDBCardText,
+    MDBCardBody,
+    MDBCardImage,
+    MDBBtn,
+    MDBTypography,
+    MDBInput
+} from 'mdb-react-ui-kit';
+import {Button} from "react-bootstrap";
+import jwt_decode from "jwt-decode";
+import axios from "axios";
+
+
+
 
 export default function Profile() {
+    useEffect(() => {
+        if(!isConnected()){
+            window.location.replace('/');
+            throw new Error('Page interdite');
+        }
+        getUsername();
+    }, []);
     return (
+        <div>
         <div className="gradient-custom-2">
             <MDBContainer className="py-5 h-100">
                 <MDBRow className="justify-content-center align-items-center h-100">
@@ -11,8 +37,7 @@ export default function Profile() {
 
                             <div className="p-4 text-black" style={{ backgroundColor: '#f8f9fa' }}>
                                 <div className="ms-3" >
-                                    <MDBTypography tag="h5">NOM PRENOM</MDBTypography>
-                                    <MDBCardText>VILLE</MDBCardText>
+                                    <p className={"setPseudo"}>Pseudo</p>
                                 </div>
                                 <div className="d-flex justify-content-end text-center py-1">
 
@@ -24,14 +49,6 @@ export default function Profile() {
                                 </div>
                             </div>
                             <MDBCardBody className="text-black p-4">
-                                <div className="mb-5">
-                                    <p className="lead fw-normal mb-1">About</p>
-                                    <div className="p-4" style={{ backgroundColor: '#f8f9fa' }}>
-                                        <MDBCardText className="font-italic mb-1">Web Developer</MDBCardText>
-                                        <MDBCardText className="font-italic mb-1">Lives in New York</MDBCardText>
-                                        <MDBCardText className="font-italic mb-0">Photographer</MDBCardText>
-                                    </div>
-                                </div>
                                 <div className="d-flex justify-content-between align-items-center mb-4">
                                     <MDBCardText className="lead fw-normal mb-0">Mes réservations</MDBCardText>
                                     <MDBCardText className="mb-0"><a href="#!" className="text-muted">Show all</a></MDBCardText>
@@ -57,10 +74,74 @@ export default function Profile() {
                                     </MDBCol>
                                 </MDBRow>
                             </MDBCardBody>
+                            <div className={"editDiv"}>
+                                <Button className="mb-0 px-5 editP" size='lg' onClick={editProfile}>Editer mon profile</Button>
+
+                            </div>
                         </MDBCard>
                     </MDBCol>
                 </MDBRow>
             </MDBContainer>
         </div>
+        <div className={"editSection"}>
+            <MDBContainer fluid className='my-5' id={"edit-container"} >
+                <MDBRow className='g-0 align-items-center container' style={{margin : "auto"}}>
+                    <MDBCol col='6'>
+                        <MDBCard className='my-5 cascading-right' style={{background: 'hsla(0, 0%, 100%, 0.55)',  backdropFilter: 'blur(30px)'}}>
+                            <MDBCardBody className='p-5 shadow-5 text-center'>
+                                <h2 className="fw-bold mb-5">Modifier mon mot de passe</h2>
+                                <MDBInput wrapperClass='mb-4' label='Mot de passe' id='form4' type='password'/>
+                                <MDBBtn className='w-100 mb-4' size='md'>Mettre à jour</MDBBtn>
+                            </MDBCardBody>
+                        </MDBCard>
+                    </MDBCol>
+                </MDBRow>
+            </MDBContainer>
+        </div>
+    </div>
     );
 }
+function editProfile() {
+    document.getElementsByClassName("editSection")[0].style.display = "block";
+}
+
+async function update() {
+    let password = document.getElementById('form4').value;
+    const body = {
+        password: password
+    }
+    try {
+        const res = await axios.post('http://localhost:3000/login', body);
+        localStorage.setItem("token", res.data)
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+async function getUsername(){
+    var token = localStorage.getItem("token");
+    var decoded = jwt_decode(token);
+    const config = {
+        headers:{
+            Authorization: "Bearer " + token,
+        }
+    };
+    try {
+        const res = await axios.get('http://localhost:3000/users/' + decoded.id, config);
+        document.getElementsByClassName('setPseudo')[0].textContent = res.data.username;
+    } catch (err) {
+        console.error(err);
+    }
+}
+function isConnected(){
+    var token = localStorage.getItem("token");
+    if(token === null || token === "disconnected"){
+       return false;
+    }
+    return true;
+
+}
+
+
+
+

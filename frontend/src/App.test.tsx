@@ -1,9 +1,13 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import App from './App';
+import {login} from './Pages/Connexion'
+import {expect, jest, test} from '@jest/globals';
 
-test('renders learn react link', () => {
-  render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+test("Connection", async () => {
+  await expect(login("test-user2@supinfo.com", "0nly_F4NS!")).resolves.not.toThrowError();
 });
+
+
+/*test("Inscription", async () => {
+  await expect(login("test-user2@supinfo.com", "0nly_F4NS!")).resolves.not.toThrowError();
+});*/
+
+

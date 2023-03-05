@@ -1,6 +1,3 @@
-import {Link} from "react-router-dom";
-import Button from "@mui/material/Button";
-import hotel from "../assets/background.jpg"
 export default function Banner() {
     return (
             <div className={"bannerPic"}>
