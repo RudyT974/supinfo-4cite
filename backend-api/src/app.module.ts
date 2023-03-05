@@ -6,10 +6,10 @@ import { User } from './users/entities/users.entity';
 import { Hotel } from './hotels/entities/hotel.entity';
 import { UsersModule } from './users/users.module';
 import { HotelsModule } from './hotels/hotels.module';
-import { BookingModule } from './booking/booking.module';
+import { BookingsModule } from './bookings/booking.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-
+import {Booking} from './bookings/entities/booking.entity'
 
 @Module({
   imports: [
@@ -20,13 +20,13 @@ import { AppService } from './app.service';
       username: 'postgres',
       password: 'password',
       database: 'postgres',
-      entities: [User, Hotel],
+      entities: [User, Hotel, Booking],
       synchronize: true,
     }),
     AuthModule,
     UsersModule,
     HotelsModule,
-    BookingModule
+    BookingsModule
 
   ],
   controllers: [AppController],
