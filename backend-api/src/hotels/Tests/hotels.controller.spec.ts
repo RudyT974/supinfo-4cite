@@ -1,20 +1,46 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { Test } from '@nestjs/testing';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { HotelsController } from '../hotels.controller';
+import { Hotel, HotelsModule } from '../hotels.module';
 import { HotelsService } from '../hotels.service';
+let jwt = require('jsonwebtoken');
 
-describe('HotelsController', () => {
-  let controller: HotelsController;
+
+describe('hotelsController', () => {
+  let hotelsController: HotelsController;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+    const moduleRef = await Test.createTestingModule({
+      imports: [TypeOrmModule.forRoot({
+        type: 'postgres',
+        host: 'localhost',
+        port: 5432,
+        username: 'postgres',
+        password: 'password',
+        database: 'postgres',
+        entities: [Hotel],
+        synchronize: true,
+      }),
+      TypeOrmModule.forFeature([Hotel])],
       controllers: [HotelsController],
       providers: [HotelsService],
     }).compile();
 
-    controller = module.get<HotelsController>(HotelsController);
+    hotelsController = moduleRef.get<HotelsController>(HotelsController);
+
   });
 
-  it('should be defined', () => {
-    expect(controller).toBeDefined();
+
+  describe('HotelModule', () => {
+    it('module should be defined', async () => {
+      expect(HotelsModule).toBeDefined();
+    });
   });
+
+  describe('hotelController', () => {
+    it('controller should be defined', () => {
+      expect(hotelsController).toBeDefined();
+    });
+  });
+
 });

@@ -2,6 +2,7 @@
 # compiled output
 /backend-api/dist
 /backend-api/node_modules
+/backend-api/test/coverage
 
 # Logs
 /backend-api/logs

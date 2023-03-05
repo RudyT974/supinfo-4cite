@@ -6,7 +6,6 @@ import { HotelsService } from '../hotels.service';
 
 let jwt = require('jsonwebtoken');
 
-
 describe('hotelsController', () => {
   let hotelsService: HotelsService;
 
@@ -30,7 +29,6 @@ describe('hotelsController', () => {
     hotelsService = moduleRef.get<HotelsService>(HotelsService);
 
   });
-
 
   describe('hotelsService', () => {
     it('service should be defined', async () => {

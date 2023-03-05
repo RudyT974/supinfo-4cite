@@ -3,8 +3,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Token } from './../auth/dto/auth.dto';
 import { DecodeToken } from '../auth/utils/jwt';
 import { Repository } from 'typeorm';
-import { UpdateUserDto } from './dto';
+
 import { User } from './entities/users.entity';
+import { UpdateUserDto } from './dto/crud.dto';
 
 @Injectable()
 export class UsersService {
@@ -81,6 +82,7 @@ export class UsersService {
       try {
         await this.usersRepository.delete(id);
       } catch (error) {
+        console.log(error)
         throw new HttpException({ message: 'Error deleting user' }, HttpStatus.INTERNAL_SERVER_ERROR);
       }
     }
@@ -101,7 +103,6 @@ export class UsersService {
   }
 
   async update(id: string, userData: UpdateUserDto, headers: any): Promise<void> {
-
     const token: Token = await headers.authorization.split(' ')[1];
     const decoded = await DecodeToken(token);
 
@@ -121,4 +122,5 @@ export class UsersService {
     }
 
   }
+
 }

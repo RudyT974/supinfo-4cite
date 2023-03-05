@@ -35,9 +35,16 @@ export class AuthService {
     if (await this.usersRepository.findOneBy({ email: user.email }) || await this.usersRepository.findOneBy({ username: user.username }))
       throw new HttpException({ message: 'User may already exist' }, HttpStatus.BAD_REQUEST);
 
+    const customerData = {
+      username: user.username,
+      email: user.email,
+      password: await argon2.hash(user.password),
+      role: 'customer'
+    }
+
     try {
       // Known Issue : https://github.com/typeorm/typeorm/issues/8706
-      await this.usersRepository.save(this.usersRepository.create(user))
+      await this.usersRepository.save(this.usersRepository.create(customerData))
     } catch (error) {
       throw new HttpException({ message: 'Error creating user' }, HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -53,7 +60,7 @@ export class AuthService {
     const employeeData = {
       username: user.username,
       email: user.email,
-      password: user.password,
+      password: await argon2.hash(user.password),
       role: 'employee'
     }
 
@@ -74,7 +81,7 @@ export class AuthService {
     const adminData = {
       username: user.username,
       email: user.email,
-      password: user.password,
+      password: await argon2.hash(user.password),
       role: 'admin'
     }
 
