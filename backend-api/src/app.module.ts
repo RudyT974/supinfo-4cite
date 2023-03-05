@@ -27,7 +27,6 @@ import { AppService } from './app.service';
     UsersModule,
     HotelsModule,
     BookingModule
-
   ],
   controllers: [AppController],
   providers: [AppService],
