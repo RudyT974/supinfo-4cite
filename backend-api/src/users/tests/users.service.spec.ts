@@ -3,7 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from '../entities/users.entity';
 import { UsersController } from '../users.controller';
 import { UsersService } from '../users.service';
-import { AdminMock, decoded_admin, decoded_employee, decoded_random, EmployeeMock, UpdatedPassword, UserMock, UsersMock, UserUpdatePassMock } from './data.mock';
+import { AdminMock, decoded_employee, decoded_random, EmployeeMock, UpdatedPassword, UserMock, UsersMock } from './data.mock';
 
 
 let jwt = require('jsonwebtoken');

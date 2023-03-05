@@ -1,9 +1,10 @@
 import { Test } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from '../../users/entities/users.entity';
-import { BookingController } from '../booking.controller';
-import { Booking } from '../booking.module';
-import { BookingsService } from '../booking.service';
+import { LoginController, RegisterController } from '../auth.controller';
+import { AuthService } from '../auth.service';
+import { Token } from '../dto/auth.dto';
+import { decoded_random } from './data.mock';
 
 let jwt = require('jsonwebtoken');
 
@@ -16,9 +17,8 @@ async function GenerateToken(params) {
   }, "JWT_SECRET");
 }
 
-describe('BookingController', () => {
-  let bookingsService: BookingsService;
-  let bookingsController: BookingController;
+describe('AuthController', () => {
+  let authService: AuthService;
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -29,20 +29,29 @@ describe('BookingController', () => {
         username: 'postgres',
         password: 'password',
         database: 'postgres',
-        entities: [Booking, User],
+        entities: [User],
         synchronize: true,
       }),
-      TypeOrmModule.forFeature([Booking])],
-      controllers: [BookingController],
-      providers: [BookingsService],
+      TypeOrmModule.forFeature([User])],
+      controllers: [LoginController, RegisterController],
+      providers: [AuthService],
     }).compile();
 
-    bookingsController = moduleRef.get<BookingController>(BookingController);
+    authService = moduleRef.get<AuthService>(AuthService);
+
   });
 
-  describe('BookingsController', () => {
+  describe('authService', () => {
     it('service should be defined', () => {
-      expect(bookingsController).toBeDefined();
+      expect(authService).toBeDefined();
+    });
+  });
+
+
+  describe('JWT - Generate', () => {
+    it('should return a token', async () => {
+      const token = await GenerateToken({ id: decoded_random.id, role: decoded_random.role });
+      expect(await token).toHaveLength(207);
     });
   });
 
