@@ -15,23 +15,23 @@ export class BookingsService {
   constructor(
     @InjectRepository(Booking)
     private bookingsRepository: Repository<Booking>
-    ){}
+  ) { }
 
-  async create(booking: CreateBookingDto, headers: any, hotelId:string): Promise<void>{
+  async create(booking: CreateBookingDto, headers: any, hotelId: string): Promise<void> {
 
     const token: Token = await headers.authorization.split(' ')[1];
     const decoded = await DecodeToken(token);
-    const bookings = await this.bookingsRepository.findOneBy({idHotel: hotelId, idClient: decoded.id});
-   
-    
-      if (await this.bookingsRepository.findOneBy({}))
+    const bookings = await this.bookingsRepository.findOneBy({ idHotel: hotelId, idClient: decoded.id });
+
+
+    if (await this.bookingsRepository.findOneBy({}))
       throw new HttpException({ message: 'Booking may already exist' }, HttpStatus.BAD_REQUEST);
-  try {
-    await this.bookingsRepository.save(this.bookingsRepository.create(booking))
-  } catch (error) {
-    console.log(error)
-    throw new HttpException({ message: 'Error creating booking' }, HttpStatus.INTERNAL_SERVER_ERROR);
-  }
+    try {
+      await this.bookingsRepository.save(this.bookingsRepository.create(booking))
+    } catch (error) {
+      console.log(error)
+      throw new HttpException({ message: 'Error creating booking' }, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 
   }
   async findAll(headers: any): Promise<Booking[]> {
@@ -39,25 +39,25 @@ export class BookingsService {
     const token: Token = await headers.authorization.split(' ')[1];
     const decoded = await DecodeToken(token);
 
-    if(decoded.role === 'admin'){
+    if (decoded.role === 'admin') {
       return await this.bookingsRepository.find();
-    }else{
+    } else {
       throw new HttpException({ message: 'Error finding bookings' }, HttpStatus.INTERNAL_SERVER_ERROR);
     }
-    
-   }
 
-   async getBookingById(id: string, arrivalDate: Date, departureDate: Date): Promise<Booking> {
+  }
+
+  async getBookingById(id: string, arrivalDate: Date, departureDate: Date): Promise<Booking> {
 
     const booking = await this.bookingsRepository.findOneBy({ id, arrivalDate, departureDate });
     if (!booking)
-    throw new HttpException({ message: 'Booking not found' }, HttpStatus.BAD_REQUEST);
+      throw new HttpException({ message: 'Booking not found' }, HttpStatus.BAD_REQUEST);
 
-  try {
-    return booking;
-  } catch (error) {
-    throw new HttpException({ message: 'Error finding booking' }, HttpStatus.INTERNAL_SERVER_ERROR);
-  }
+    try {
+      return booking;
+    } catch (error) {
+      throw new HttpException({ message: 'Error finding booking' }, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   async update(id: string, BookingData: UpdateBookingDto, headers: any): Promise<void> {
@@ -67,7 +67,7 @@ export class BookingsService {
     const oldBookingData = await this.bookingsRepository.findOneBy({ id });
 
 
-    if(decoded.role === 'admin'){
+    if (decoded.role === 'admin') {
       try {
         delete oldBookingData.arrivalDate;
         delete oldBookingData.departureDate;
@@ -77,11 +77,11 @@ export class BookingsService {
         throw new HttpException({ message: 'Error updating booking' }, HttpStatus.INTERNAL_SERVER_ERROR);
       }
     }
-    
+
     if (!oldBookingData) {
       throw new HttpException({ message: 'Booking not found' }, HttpStatus.NOT_FOUND);
     }
-      
+
 
   }
 

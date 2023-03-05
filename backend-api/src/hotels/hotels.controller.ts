@@ -1,7 +1,7 @@
-import { Controller,Headers, Get, Post, Body, Param, Delete, ValidationPipe, UsePipes, Put, UseInterceptors, UploadedFile, ParseFilePipe, UploadedFiles, UseGuards, Req, Patch } from '@nestjs/common';
+import { Controller, Headers, Get, Post, Body, Param, Delete, ValidationPipe, UsePipes, Patch } from '@nestjs/common';
 import { HotelsService } from './hotels.service';
 import { CreateHotelDto } from './dto/create-hotel.dto';
-import { UpdateHotelDto } from './dto'; 
+import { UpdateHotelDto } from './dto';
 import { Role } from "../auth/guards/auth.enum";
 import { Roles } from "../auth/guards/auth.decorator";
 import { Hotel } from './entities/hotel.entity';
@@ -18,7 +18,7 @@ export class HotelsController {
   async create(@Body() hotel: CreateHotelDto) {
     return this.hotelsService.create(hotel);
   }
- 
+
   @Get()
   async findAll(): Promise<Hotel[]> {
     return this.hotelsService.findAll();

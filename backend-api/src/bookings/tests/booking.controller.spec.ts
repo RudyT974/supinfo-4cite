@@ -2,7 +2,7 @@ import { Test } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from '../../users/entities/users.entity';
 import { BookingController } from '../booking.controller';
-import { Booking } from '../booking.module';
+import { Booking, BookingsModule } from '../booking.module';
 import { BookingsService } from '../booking.service';
 
 let jwt = require('jsonwebtoken');
@@ -47,5 +47,9 @@ describe('CatsController', () => {
     });
   });
 
-
+  describe('BookingModule', () => {
+    it('module should be defined', async () => {
+      expect(BookingsModule).toBeDefined();
+    });
+  });
 });

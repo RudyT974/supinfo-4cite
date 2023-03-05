@@ -8,7 +8,8 @@ import Booking from '../../src/bookings/entities/booking.entity';
 import { BookingsModule } from '../../src/bookings/booking.module';
 import { decoded_admin, decoded_customer, HotelData1 } from './data.mock';
 import { JWT_SECRET } from '../../src/auth/utils/constant';
-
+import { HotelsModule } from '../../src/hotels/hotels.module';
+import {Hotel} from '../../src/hotels/entities/hotel.entity'
 
 
 let jwt = require('jsonwebtoken');
@@ -28,14 +29,14 @@ describe('UserController (e2e)', () => {
   beforeAll(async () => {
 
     const moduleFixture = await Test.createTestingModule({
-      imports: [BookingsModule, AuthModule, TypeOrmModule.forRoot({
+      imports: [HotelsModule, AuthModule, TypeOrmModule.forRoot({
         type: 'postgres',
         host: 'localhost',
         port: 5432,
         username: 'postgres',
         password: 'password',
         database: 'postgres',
-        entities: [Booking],
+        entities: [Hotel],
         synchronize: true,
       }),],
     }).compile();
@@ -46,11 +47,11 @@ describe('UserController (e2e)', () => {
     
   });
 
-  it('/hotel (POST)', async() => {
+  it('/hotels (POST)', async() => {
     const payload = HotelData1
     const token = await GenerateToken(decoded_admin);
     return request(app.getHttpServer())
-      .post('/hotel')
+      .post('/hotels')
       .set('Authorization', `Bearer ${token}`)
       .send(payload)
       .expect(res => {
@@ -62,18 +63,18 @@ describe('UserController (e2e)', () => {
       })
   });
 
-  it('/hotel (GET) - No Auth', async () => {
-    return await request(app.getHttpServer()).get('/hotel').expect(401);
+  it('/hotels (GET) - No Auth', async () => {
+    return await request(app.getHttpServer()).get('/hotels').expect(401);
   });
 
-  it('/hotel (GET) - Customer', async () => {
+  it('/hotels (GET) - Customer', async () => {
     const token = await GenerateToken(decoded_customer);
-    return await request(app.getHttpServer()).get('/hotel').set('Authorization', `Bearer ${token}`).expect(403);
+    return await request(app.getHttpServer()).get('/hotels').set('Authorization', `Bearer ${token}`).expect(403);
   });
   
-  it('/hotel (GET) - Admin', async () => {
+  it('/hotels (GET) - Admin', async () => {
     const token = await GenerateToken(decoded_admin);
-    return await request(app.getHttpServer()).get('/hotel').set('Authorization', `Bearer ${token}`).expect(200);
+    return await request(app.getHttpServer()).get('/hotels').set('Authorization', `Bearer ${token}`).expect(200);
   });
 
 })

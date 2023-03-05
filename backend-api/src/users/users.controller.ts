@@ -1,10 +1,10 @@
 import { Body, Headers, Controller, Delete, Get, Param, UsePipes, ValidationPipe, Patch } from "@nestjs/common";
 import { UpdateUserDto } from "./dto/crud.dto";
 import { Role } from "../auth/guards/auth.enum";
-import { Roles } from "../auth/guards/auth.decorator";
-import { User } from "./entities/users.entity";
+import { Roles } from "../auth/guards/auth.decorator"
 import { UsersService } from "./users.service";
 import { UserIdParams } from "./dto/query.dto";
+import { User } from "./entities/users.entity";
 
 @Controller('users')
 export class UsersController {

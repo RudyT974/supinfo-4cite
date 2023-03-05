@@ -1,12 +1,12 @@
 import { INestApplication } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { AuthModule } from "src/auth/auth.modules";
-import { Token, TokenStructure } from "src/auth/dto/auth.dto";
-import { JWT_SECRET } from "src/auth/utils/constant";
+import { AuthModule } from "../../auth/auth.modules";
+import { Token, TokenStructure } from "../../auth/dto/auth.dto";
 import * as request from 'supertest';
 import { HotelsModule } from "../hotels.module";
 import {Hotel} from '../entities/hotel.entity'
+import { customerData } from "./data.mock";
 let jwt = require('jsonwebtoken');
 
 async function GenerateToken(params: TokenStructure): Promise<Token> {
@@ -15,7 +15,7 @@ async function GenerateToken(params: TokenStructure): Promise<Token> {
     role: params.role,
     iat: Math.floor(Date.now() / 1000),
     exp: Math.floor(Date.now() / 1000) + (60 * 60),
-  }, JWT_SECRET);
+  }, "JWT_SECRET");
 }
 
 describe('HotelController (e2e)', () => {
@@ -40,18 +40,4 @@ describe('HotelController (e2e)', () => {
     await app.init();
   });
 
-
-  it('/register (POST) - Customer', () => {
-    const payload = customerData
-    return request(app.getHttpServer())
-      .post('/register')
-      .send(payload)
-      .expect(res => {
-        if (res.statusCode === 400) {
-          expect(res.text).toEqual("{\"message\":\"User may already exist\"}")
-        } else {
-          expect(res.statusCode).toBe(201)
-        }
-      })
-  });
 });

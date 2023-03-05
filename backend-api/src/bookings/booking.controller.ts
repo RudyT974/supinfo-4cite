@@ -11,12 +11,12 @@ import { CreateBookingDto } from './dto/create-booking.dto';
 @Controller('booking')
 export class BookingController {
   constructor(
-    private readonly bookingService: BookingsService) {}
+    private readonly bookingService: BookingsService) { }
 
   @Post()
   @Roles(Role.ADMIN, Role.EMPLOYEE, Role.CUSTOMER)
   @UsePipes(new ValidationPipe({ transform: true }))
-  async create(@Body()booking: CreateBookingDto, @Headers() headers: any, @Param('id') hotelId: string): Promise<any> {
+  async create(@Body() booking: CreateBookingDto, @Headers() headers: any, @Param('id') hotelId: string): Promise<any> {
     return this.bookingService.create(booking, headers, hotelId);
   }
 
@@ -37,7 +37,7 @@ export class BookingController {
   @Patch(':id')
   @Roles(Role.ADMIN, Role.EMPLOYEE, Role.CUSTOMER)
   @UsePipes(new ValidationPipe({ transform: true }))
-  async update(@Param('id') id: string, @Body() updateBookingDto: UpdateBookingDto,@Headers() headers: any) {
+  async update(@Param('id') id: string, @Body() updateBookingDto: UpdateBookingDto, @Headers() headers: any) {
     return this.bookingService.update(id, updateBookingDto, headers);
   }
 
