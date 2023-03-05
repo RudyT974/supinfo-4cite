@@ -1,0 +1,652 @@
+{
+	"info": {
+		"_postman_id": "64d887d5-6f4c-446d-90fb-1d35c7ea27ed",
+		"name": "4CITE",
+		"description": "This document cover the REST backend-api of the 4CITE project from supinfo.  \nThe API is using a PostgreSQL database to store and fetch data.\n\nTo test the API, please generate tokens using the **auth endpoints**. The needs to be stored in the 4CITE repository. Please consider that depending your role, you will not be able to fetch the same data because of your authorization.\n\nThe Authentication work using JWT token containing your role. Authorization are provided using a RBAC (Role-based access control) system based on 3 roles :\n\n- **Guest** (This is not a role, this is unregistered/anonymous users)  \n    Have read access to public endpoints.\n- **Customer** (Registered User)  \n    Have read and write access their own data,  \n    Have write and read access to his own booking endpoints,  \n    Have read access hotels public endpoints.\n- **Employee**  \n    Can access their own data,  \n    Have read access to customers data,  \n    Have read access to public endpoints.\n- **Admin**  \n    Have read and write access to his own data,  \n    Have read and write access to public endpoints,  \n    Have read and write access to customers and employees endpoints.\n    \n\nIf your don't have the right to access an endpoint, the server will return a **403 FORBIDDEN** HTTP CODE to inform your it is forbidden. If your access has expired, it will be a **401 UNAUTHORIZED** HTTP CODE.\n\nResource creation will always return a **201 CREATED** HTTP CODE, a success request a **200 OK** HTTP CODE and a bad request a **400 BAD** **REQUEST** HTTP CODE. Bad request will always send a message providing the source of the error matching the data validation.\n\nInternal server error are always possible, so you will get a **500 INTERNAL SERVER** ERROR HTTP CODE and administrator will need your feedback.\n\n**OFFSET, LIMIT AND PAGINATION**\n\nOffset and limit can be set as query parameters, type needed is INT and will be set by default to :\n\n- **OFFSET : 0**\n- **LIMIT : 10**",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "14361672"
+	},
+	"item": [
+		{
+			"name": "index",
+			"item": [
+				{
+					"name": "Health Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000"
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "users",
+			"item": [
+				{
+					"name": "findAllUser()",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/users?offset=0&limit=10",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"users"
+							],
+							"query": [
+								{
+									"key": "offset",
+									"value": "0",
+									"description": "default to 0, must be int"
+								},
+								{
+									"key": "limit",
+									"value": "10",
+									"description": "default to 10, must be int\n"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findById()",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/users/0dfe9b62-4e33-4d2e-913c-3669523e6ca4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"users",
+								"0dfe9b62-4e33-4d2e-913c-3669523e6ca4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteById()",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/users/41fc4b7b-62b5-4d0b-b115-e43df719a053",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"users",
+								"41fc4b7b-62b5-4d0b-b115-e43df719a053"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updatePasswordById()",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"password\": \"0nly_F4NS!\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/users/7b802795-ca4e-4136-a0a6-d78c61c072a3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"users",
+								"7b802795-ca4e-4136-a0a6-d78c61c072a3"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "test account",
+					"item": [
+						{
+							"name": "admin",
+							"item": [
+								{
+									"name": "createAdmin()",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"username\": \"test-admin\",\r\n    \"email\": \"test-admin@supinfo.com\",\r\n    \"password\": \"0nly_F4NS!\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://localhost:3000/register/admin",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "3000",
+											"path": [
+												"register",
+												"admin"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "login",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"email\": \"test-admin@supinfo.com\",\r\n    \"password\": \"0nly_F4NS!\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://localhost:3000/login",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "3000",
+											"path": [
+												"login"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "employee",
+							"item": [
+								{
+									"name": "createEmployee()",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"username\": \"test-employee\",\r\n    \"email\": \"test-employee@supinfo.com\",\r\n    \"password\": \"0nly_F4NS!\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://localhost:3000/register/employee",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "3000",
+											"path": [
+												"register",
+												"employee"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "login",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"username\": \"test-employee\",\r\n    \"email\": \"test-employee@supinfo.com\",\r\n    \"password\": \"0nly_F4NS!\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://localhost:3000/login",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "3000",
+											"path": [
+												"login"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"test-user@supinfo.com\",\r\n    \"password\": \"0nly_F4NS!\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"test-user\",\r\n    \"email\": \"test-user@supinfo.com\",\r\n    \"password\": \"0nly_F4NS!\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"register"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer"
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "hotels",
+			"item": [
+				{
+					"name": "addHotel",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"test\",\r\n    \"location\": \"ile de la Reunion1\",\r\n    \"description\": \"location de gites1.\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/hotels",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"hotels"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteHotelById",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:3000/hotels/hotel123",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"hotels",
+								"hotel123"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findAll()",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/hotels",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"hotels"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update()",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"description\": \"de gites.\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/hotels/f56a11e1-b09c-4e61-a1b2-ce0a24ab834e",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"hotels",
+								"f56a11e1-b09c-4e61-a1b2-ce0a24ab834e"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "uploadPicture",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"test1\",\r\n    \"location\": \"la Reunion\",\r\n    \"description\": \"location de gites1.\",\r\n    \"picture_list\": \"11.jpg\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/upload",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"upload"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "addphoto",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/D:/kreolinns/3.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/hotels/photo",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"hotels",
+								"photo"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "bookings",
+			"item": [
+				{
+					"name": "findAll()",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/booking",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"booking"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "addBooking",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"rudy\",\r\n    \"idClient\": \"4b1f7a36-2079-47da-b154-5efb2615f362\",\r\n    \"idHotel\": \"dcb66524-2716-4612-99b2-98097cbf05cf\",\r\n    \"description\": \"reservation de chambre.\",\r\n    \"reservationDate\": \"2022-10-16 13:38:15-07\",\r\n    \"arrivalDate\": \"2024-10-16 13:38:15-07\",\r\n    \"departureDate\": \"2024-10-20 13:38:15-07\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/booking",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"booking"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteBookingById",
+					"request": {
+						"method": "DELETE",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"arrivalDate\": \"2024-10-20 13:38:15-07\",\r\n\"departureDate\": \"2024-10-26 13:38:15-07\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/booking/697cbece-bf7e-41ff-a3cb-4f5de3926261",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"booking",
+								"697cbece-bf7e-41ff-a3cb-4f5de3926261"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRiMWY3YTM2LTIwNzktNDdkYS1iMTU0LTVlZmIyNjE1ZjM2MiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTY3ODA1MDQ5MywiZXhwIjoxNjc4MDU0MDkzfQ.nG8rx0yntoDPcoduM_gSwzr7LZhOeOQoY9oRoE41XJQ",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
