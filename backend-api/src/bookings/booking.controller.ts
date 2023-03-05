@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe } from '@nestjs/common';
 import { Headers, UsePipes } from '@nestjs/common/decorators';
-import { Roles } from 'src/auth/guards/auth.decorator';
-import { Role } from 'src/auth/guards/auth.enum';
+import { Roles } from '../auth/guards/auth.decorator';
+import { Role } from '../auth/guards/auth.enum';
 import { BookingsService } from './booking.service';
 import { BookingIdParams } from './dto/BookingIdParams';
 import { UpdateBookingDto } from './dto/update-booking.dto';
@@ -11,12 +11,12 @@ import { CreateBookingDto } from './dto/create-booking.dto';
 @Controller('booking')
 export class BookingController {
   constructor(
-    private readonly bookingService: BookingsService) {}
+    private readonly bookingService: BookingsService) { }
 
   @Post()
   @Roles(Role.ADMIN, Role.EMPLOYEE, Role.CUSTOMER)
   @UsePipes(new ValidationPipe({ transform: true }))
-  async create(@Body()booking: CreateBookingDto, @Headers() headers: any, @Param('id') hotelId: string): Promise<any> {
+  async create(@Body() booking: CreateBookingDto, @Headers() headers: any, @Param('id') hotelId: string): Promise<any> {
     return this.bookingService.create(booking, headers, hotelId);
   }
 
@@ -37,7 +37,7 @@ export class BookingController {
   @Patch(':id')
   @Roles(Role.ADMIN, Role.EMPLOYEE, Role.CUSTOMER)
   @UsePipes(new ValidationPipe({ transform: true }))
-  async update(@Param('id') id: string, @Body() updateBookingDto: UpdateBookingDto,@Headers() headers: any) {
+  async update(@Param('id') id: string, @Body() updateBookingDto: UpdateBookingDto, @Headers() headers: any) {
     return this.bookingService.update(id, updateBookingDto, headers);
   }
 

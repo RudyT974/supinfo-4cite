@@ -9,7 +9,7 @@ import { HotelsModule } from './hotels/hotels.module';
 import { BookingsModule } from './bookings/booking.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import {Booking} from './bookings/entities/booking.entity'
+import { Booking } from './bookings/entities/booking.entity'
 
 @Module({
   imports: [
@@ -27,11 +27,9 @@ import {Booking} from './bookings/entities/booking.entity'
     UsersModule,
     HotelsModule,
     BookingsModule
-
   ],
   controllers: [AppController],
   providers: [AppService],
-
 })
 
 export class AppModule {
