@@ -91,9 +91,21 @@ describe('CatsController', () => {
       const headers = { 'authorization': `Bearer ${await token}` };
 
       jest.spyOn(usersService, 'findById').mockImplementation(async () => result);
-
-      expect(await usersService.update(UserMock.id, UpdatedPassword, headers)).toBe(sta);
+      console.log(result)
+      expect(await usersService.update(UserMock.id, UpdatedPassword, headers)).toBe(undefined) // Return Promise<void>
     });
   });
+
+  describe('delete by id', () => {
+    it('should delete user', async () => {
+      let result: User = UserMock;
+      const token = await GenerateToken({ id: decoded_employee.id, role: decoded_employee.role });
+      const headers = { 'authorization': `Bearer ${await token}` };
+
+      jest.spyOn(usersService, 'delete').mockImplementation(async () => result);
+
+      expect(await usersService.remove(UserMock.id, headers)).toBe(undefined) // Return Promise<void>
+    });
+  }
 
 });
