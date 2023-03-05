@@ -4,7 +4,7 @@ import React from 'react';
 import {expect, jest, test} from '@jest/globals';
 import {render, screen} from "@testing-library/react";
 test("Connection", async () => {
-  await expect(login("test-user2@supinfo.com", "n3wP4ss!")).resolves.not.toThrowError();
+  await expect(login("test-user2@supinfo.com", "O!")).resolves.not.toThrowError();
 });
 
 /*
