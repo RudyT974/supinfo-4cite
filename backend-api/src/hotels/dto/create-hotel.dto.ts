@@ -1,6 +1,8 @@
 import { IsNotEmpty, IsString, Length } from "class-validator";
 export class CreateHotelDto {
 
+
+    @IsNotEmpty()
     @IsString()
     @Length(3, 25)
     name: string;
