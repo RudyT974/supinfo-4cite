@@ -3,12 +3,17 @@ import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from '../../src/users/entities/users.entity';
-import { adminData, badEmail, badPass, customerData, decoded_admin, decoded_customer, decoded_employee, decoded_random, employeeData } from './data.mock';
+import {
+  adminData, badEmail, badPass, customerData,
+  decoded_admin, decoded_customer, decoded_employee,
+  decoded_random, employeeData
+} from './data.mock';
 import { UsersModule } from '../../src/users/users.module';
 import { Token, TokenStructure } from '../../src/auth/dto/auth.dto';
 import { JWT_SECRET } from '../../src/auth/utils/constant';
 import { AuthModule } from '../../src/auth/auth.modules';
 import { LoginData } from '../auth/data.mock';
+
 
 let jwt = require('jsonwebtoken');
 
@@ -23,11 +28,9 @@ async function GenerateToken(params: TokenStructure): Promise<Token> {
 
 describe('UserController (e2e)', () => {
   let app: INestApplication;
-  let token_admin: Token;
-  let token_employee: Token;
-  let token_customer: Token;
 
   beforeAll(async () => {
+
     const moduleFixture = await Test.createTestingModule({
       imports: [UsersModule, AuthModule, TypeOrmModule.forRoot({
         type: 'postgres',
@@ -114,7 +117,7 @@ describe('UserController (e2e)', () => {
       .expect(201)
   });
 
-  // ---------------------------- /users
+  // ---------------------------- GET /users
 
   it('/users (GET) - No Auth', async () => {
     return await request(app.getHttpServer()).get('/users').expect(401);
@@ -135,7 +138,7 @@ describe('UserController (e2e)', () => {
     return await request(app.getHttpServer()).get('/users').set('Authorization', `Bearer ${token}`).expect(200);
   });
 
-  // ---------------------------- /users/:id
+  // ---------------------------- GET /users/:id
 
   it('/users/:id (GET BY MYSELF ID) - No Auth', async () => {
     const token = await GenerateToken(decoded_customer);
@@ -188,7 +191,58 @@ describe('UserController (e2e)', () => {
       })
   });
 
-  // ----------------------------
+  // ---------------------------- DELETE /users/:id
+
+  // DELETE USER CREATED BEFORE TO CLEAN DB
+
+  test(('/users/:id (DELETE BY ID) - Customer'), async () => {
+    const adminPayload = adminData
+    const customerPayload = customerData
+
+    return await request(app.getHttpServer())
+      .post('/login')
+      .send(customerPayload)
+      .expect(201)
+      .expect(async res => {
+        const decodedUser = jwt.decode(res.text);
+        await request(app.getHttpServer())
+          .post('/login')
+          .send(adminPayload)
+          .expect(201)
+          .expect(async res => {
+            const adminToken = res.text;
+            await request(app.getHttpServer())
+              .delete(`/users/${decodedUser.id}`)
+              .set('Authorization', `Bearer ${adminToken}`)
+              .expect(200)
+          });
+      })
+  })
+
+
+  test(('/users/:id (DELETE BY ID) -  Employee'), async () => {
+    const adminPayload = adminData
+    const employeePayload = employeeData
+
+    return await request(app.getHttpServer())
+      .post('/login')
+      .send(employeePayload)
+      .expect(201)
+      .expect(async res => {
+        const decodedEmployee = jwt.decode(res.text);
+        await request(app.getHttpServer())
+          .post('/login')
+          .send(adminPayload)
+          .expect(201)
+          .expect(async res => {
+            const adminToken = res.text;
+            await request(app.getHttpServer())
+              .delete(`/users/${decodedEmployee.id}`)
+              .set('Authorization', `Bearer ${adminToken}`)
+              .expect(200)
+          });
+      })
+  })
 
 });
 

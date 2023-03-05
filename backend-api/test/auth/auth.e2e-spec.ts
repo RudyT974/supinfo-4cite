@@ -4,7 +4,7 @@ import { INestApplication } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './../../src/auth/auth.modules';
 import { User } from './../../src/users/entities/users.entity';
-import { LoginData } from './data.mock';
+import { LoginData, RegisterData } from './data.mock';
 import { LoginUserDto } from './../../src/auth/dto/auth.dto';
 
 let jwt = require('jsonwebtoken');
@@ -28,6 +28,14 @@ describe('AuthController (e2e)', () => {
 
     app = moduleFixture.createNestApplication();
     await app.init();
+  });
+
+  it('/register (POST) - Bad password', () => {
+    const payload = RegisterData
+    return request(app.getHttpServer())
+      .post('/register')
+      .send(payload)
+      .expect(400)
   });
 
 
