@@ -1,18 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1677977497493" clover="3.2.0">
-  <project timestamp="1677977497493" name="All files">
-    <metrics statements="11" coveredstatements="11" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0" elements="11" coveredelements="11" complexity="0" loc="11" ncloc="11" packages="2" files="2" classes="2"/>
+<coverage generated="1678048299191" clover="3.2.0">
+  <project timestamp="1678048299191" name="All files">
+    <metrics statements="16" coveredstatements="16" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0" elements="16" coveredelements="16" complexity="0" loc="16" ncloc="16" packages="3" files="3" classes="3"/>
     <package name="auth">
       <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-      <file name="data.mock.ts" path="E:\Repos\Supinfo\supinfo-4cite\backend-api\test\auth\data.mock.ts">
+      <file name="data.mock.ts" path="D:\Supinfo\4eme_Annees\4CITE\final project\supinfo-4cite\backend-api\test\auth\data.mock.ts">
         <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="2" type="stmt"/>
         <line num="6" count="2" type="stmt"/>
       </file>
     </package>
+    <package name="bookings">
+      <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <file name="data.mock.ts" path="D:\Supinfo\4eme_Annees\4CITE\final project\supinfo-4cite\backend-api\test\bookings\data.mock.ts">
+        <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="11" count="1" type="stmt"/>
+        <line num="20" count="1" type="stmt"/>
+        <line num="24" count="1" type="stmt"/>
+        <line num="29" count="1" type="stmt"/>
+      </file>
+    </package>
     <package name="users">
       <metrics statements="9" coveredstatements="9" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-      <file name="data.mock.ts" path="E:\Repos\Supinfo\supinfo-4cite\backend-api\test\users\data.mock.ts">
+      <file name="data.mock.ts" path="D:\Supinfo\4eme_Annees\4CITE\final project\supinfo-4cite\backend-api\test\users\data.mock.ts">
         <metrics statements="9" coveredstatements="9" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
         <line num="6" count="1" type="stmt"/>

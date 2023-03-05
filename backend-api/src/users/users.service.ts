@@ -81,6 +81,7 @@ export class UsersService {
       try {
         await this.usersRepository.delete(id);
       } catch (error) {
+        console.log(error)
         throw new HttpException({ message: 'Error deleting user' }, HttpStatus.INTERNAL_SERVER_ERROR);
       }
     }

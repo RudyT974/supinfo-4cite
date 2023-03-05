@@ -1,9 +1,9 @@
-import { Token } from 'src/auth/dto/auth.dto';
+import { Token } from '../auth/dto/auth.dto';
 import { Booking } from './entities/booking.entity';
 import { Injectable } from '@nestjs/common';
 import { HttpStatus } from '@nestjs/common/enums';
 import { Repository } from 'typeorm';
-import { DecodeToken } from 'src/auth/utils/jwt';
+import { DecodeToken } from '../auth/utils/jwt';
 import { HttpException } from '@nestjs/common/exceptions';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateBookingDto } from './dto/create-booking.dto';

@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe } from '@nestjs/common';
 import { Headers, UsePipes } from '@nestjs/common/decorators';
-import { Roles } from 'src/auth/guards/auth.decorator';
-import { Role } from 'src/auth/guards/auth.enum';
+import { Roles } from '../auth/guards/auth.decorator';
+import { Role } from '../auth/guards/auth.enum';
 import { BookingsService } from './booking.service';
 import { BookingIdParams } from './dto/BookingIdParams';
 import { UpdateBookingDto } from './dto/update-booking.dto';
