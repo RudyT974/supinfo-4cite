@@ -2,9 +2,36 @@
 
 Typescript 4CITE project for SUPINFO.
 
-## Local Installation
+## Documentation
 
-### Backend API
+### Backend API - Postman - Readme.md
+
+All endpoints are documented in the Postman collection in the `./documentation` folder.
+All installation and test commands are present in README.md file.
+
+### Frontend - Readme.md
+
+All installation and test commands are present in README.md file.
+
+### Pipeline - Readme.md
+
+All installation and test commands are present in README.md file.
+
+## Negative points
+
+### Backend
+
+- Backend coverage showed must not be true.
+
+### Frontend
+
+-
+
+### Pipeline
+
+-
+
+# Backend Installation
 
 **Requirements :**
 
@@ -12,29 +39,35 @@ Typescript 4CITE project for SUPINFO.
 - Updated Node Package Manager
 - Docker
 
-**Setup :**
-
 ```bash
-# Clone the repository
-# Go to the database folder
-# Run the database container
-# Go to the backend-api folder
-# Install node modules
-# Run the server
 
-git clone https://github.com/NathanRodet/supinfo-4cite.git
-cd supinfo-4cite/database
-docker-compose up -d
-cd ..
-cd /backend-api
-npm ci
-npm run start:dev
+$ cd backend-api
+$ npm ci
 ```
 
-## Documentation
+## Running the app
 
-### Postman
+```bash
 
-All endpoints are documented in the Postman collection in the `/backend-api/documentation` folder.
+# development
+$ npm run start
 
+# watch mode
+$ npm run start:dev
 
+# production mode
+$ npm run start:prod
+```
+
+## Test
+
+```bash
+# unit tests
+$ npm run test
+
+# e2e tests
+$ npm run test:e2e
+
+# test coverage
+$ npm run test:cov
+```

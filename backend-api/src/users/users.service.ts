@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Token } from 'src/auth/dto/auth.dto';
-import { DecodeToken } from 'src/auth/utils/jwt';
+import { Token } from './../auth/dto/auth.dto';
+import { DecodeToken } from '../auth/utils/jwt';
 import { Repository } from 'typeorm';
 import { UpdateUserDto } from './dto';
 import { User } from './entities/users.entity';
@@ -62,6 +62,7 @@ export class UsersService {
         throw new HttpException({ message: 'User not found' }, HttpStatus.NOT_FOUND);
       else
         return user;
+
     }
   }
 

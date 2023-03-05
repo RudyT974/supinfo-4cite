@@ -7,19 +7,23 @@ import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
 import { Link } from "react-router-dom";
+import jwtDecode from "jwt-decode";
 
 
 var token = localStorage.getItem("token");
 
 var pages = ['Profil', 'Logout'];
-if(token == null){
+if(token == null  || token === "disconnected"){
     pages = ['Connexion', 'Inscription'];
+}
+else{
+    const decoded = jwtDecode(token);
+    // @ts-ignore
+    if(decoded.role === "admin"){
+        var pages = ['Profil', "Ajout", 'Logout'];
+    }
 }
 function Header() {
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
@@ -27,9 +31,6 @@ function Header() {
 
     const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElNav(event.currentTarget);
-    };
-    const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorElUser(event.currentTarget);
     };
 
     const handleCloseNavMenu = () => {

@@ -1,4 +1,4 @@
-import { IsEmail, IsJWT, IsNotEmpty, IsNumber, IsString, IsStrongPassword, IsUUID, Length } from "class-validator";
+import { IsEmail, IsJWT, IsNotEmpty, IsString, IsStrongPassword, IsUUID, Length } from "class-validator";
 
 export class LoginUserDto {
 

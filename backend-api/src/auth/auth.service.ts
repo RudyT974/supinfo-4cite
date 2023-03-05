@@ -1,13 +1,10 @@
 const argon2 = require('argon2');
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { User } from "src/users/entities/users.entity";
+import { User } from './../users/entities/users.entity';
 import { Repository } from "typeorm";
 import { Token, LoginUserDto, RegisterUserDto } from "./dto/auth.dto";
 import { GenerateToken } from "./utils/jwt";
-
-// https://www.youtube.com/watch?v=_L225zpUK0M&ab_channel=MariusEspejo
-// https://www.youtube.com/watch?v=wdsp7BNmJRc&ab_channel=MariusEspejo
 
 @Injectable()
 export class AuthService {

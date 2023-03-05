@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty, IsStrongPassword, IsUUID, isUUID, Length } from 'class-validator';
+import { IsNotEmpty, IsStrongPassword } from 'class-validator';
 
 
 export class UpdateUserDto {

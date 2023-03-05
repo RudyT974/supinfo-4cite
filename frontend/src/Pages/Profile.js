@@ -9,15 +9,11 @@ import {
     MDBCardBody,
     MDBCardImage,
     MDBBtn,
-    MDBTypography,
     MDBInput
 } from 'mdb-react-ui-kit';
 import {Button} from "react-bootstrap";
 import jwt_decode from "jwt-decode";
 import axios from "axios";
-
-
-
 
 export default function Profile() {
     useEffect(() => {
@@ -49,10 +45,6 @@ export default function Profile() {
                                 </div>
                             </div>
                             <MDBCardBody className="text-black p-4">
-                                <div className="d-flex justify-content-between align-items-center mb-4">
-                                    <MDBCardText className="lead fw-normal mb-0">Mes réservations</MDBCardText>
-                                    <MDBCardText className="mb-0"><a href="#!" className="text-muted">Show all</a></MDBCardText>
-                                </div>
                                 <MDBRow>
                                     <MDBCol className="mb-2">
                                         <MDBCardImage src="https://mdbcdn.b-cdn.net/img/Photos/Lightbox/Original/img%20(112).webp"
@@ -90,8 +82,8 @@ export default function Profile() {
                         <MDBCard className='my-5 cascading-right' style={{background: 'hsla(0, 0%, 100%, 0.55)',  backdropFilter: 'blur(30px)'}}>
                             <MDBCardBody className='p-5 shadow-5 text-center'>
                                 <h2 className="fw-bold mb-5">Modifier mon mot de passe</h2>
-                                <MDBInput wrapperClass='mb-4' label='Mot de passe' id='form4' type='password'/>
-                                <MDBBtn className='w-100 mb-4' size='md'>Mettre à jour</MDBBtn>
+                                <MDBInput wrapperClass='mb-4' label='Mot de passe' id='newPass' type='password'/>
+                                <MDBBtn className='w-100 mb-4' size='md' onClick={update}>Mettre à jour</MDBBtn>
                             </MDBCardBody>
                         </MDBCard>
                     </MDBCol>
@@ -106,13 +98,20 @@ function editProfile() {
 }
 
 async function update() {
-    let password = document.getElementById('form4').value;
+    var newPass = document.getElementById('newPass').value;
+    var token = localStorage.getItem("token");
+    var decoded = jwt_decode(token);
+
     const body = {
-        password: password
+        password: newPass
     }
+    const config = {
+        headers:{
+            Authorization: "Bearer " + token,
+        }
+    };
     try {
-        const res = await axios.post('http://localhost:3000/login', body);
-        localStorage.setItem("token", res.data)
+        await axios.patch('http://localhost:3000/users/' + decoded.id, body, config);
     } catch (err) {
         console.error(err);
     }

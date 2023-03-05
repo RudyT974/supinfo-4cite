@@ -32,10 +32,8 @@ export class RolesGuard implements CanActivate {
 
     // Check if user has the required role
     if (requiredRoles.find(role => role === tokenData.role)) {
-      console.log(requiredRoles, tokenData.role, "true")
       return true;
     } else {
-      console.log(requiredRoles, tokenData.role, "false")
       return false;
     }
   }

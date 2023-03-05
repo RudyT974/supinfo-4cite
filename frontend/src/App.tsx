@@ -5,7 +5,7 @@ import Connexion from "./Pages/Connexion";
 import Profile from "./Pages/Profile";
 import Inscription from "./Pages/Inscription";
 import Logout from "./Pages/Logout";
-import NewHotel from "./Pages/newHotel";
+import Ajout from "./Pages/Ajout";
 
 import Home from "./Pages/Home";
 import './styles/index.css';
@@ -24,7 +24,7 @@ export default function App() {
         <Route path="Connexion" element={<Connexion />}/>
         <Route path="Logout" element={<Logout />}/>
         <Route path="Profil" element={<Profile />} />
-        <Route path="newHotel" element={<NewHotel />} />
+        <Route path="Ajout" element={<Ajout />} />
         <Route path="Inscription" element={<Inscription />}/>
 
       </Routes>

@@ -27,7 +27,7 @@ export default function Inscription() {
                             <MDBBtn className='w-100 mb-4' size='md' onClick={register}>Valider</MDBBtn>
                             <div className="alert alert-success nodisplay" role="alert">
                                <p>Compte créé avec succès</p>
-                                <Link to={"/Connection"}>Me connecter</Link>
+                                <Link to={"/Connexion"}>Me connecter</Link>
                             </div>
                         </MDBCardBody>
                     </MDBCard>
@@ -43,7 +43,7 @@ function register(){
     postRegister(username, mail, mdp);
 }
 
-const postRegister = async (username, email, password) => {
+export const postRegister = async (username, email, password) => {
     const body = {
         username : username,
         email: email,
@@ -55,6 +55,7 @@ const postRegister = async (username, email, password) => {
             document.getElementsByClassName('nodisplay')[0].style.display = "block";
         }
     } catch (err) {
-        console.error(err);
+      //  var rep = (JSON.parse(err.response.request.responseText));
+        throw new Error("L'utilisateur existe déjà");
     }
 }
